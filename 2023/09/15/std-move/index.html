@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="This is Eric Lu&#39;s personal blog">
+<meta name="description" content="记录了std::move的意义与应用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="std::move">
 <meta property="og:url" content="http://example.com/2023/09/15/std-move/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="This is Eric Lu&#39;s personal blog">
+<meta property="og:description" content="记录了std::move的意义与应用">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-09-15T13:18:41.000Z">
-<meta property="article:modified_time" content="2023-09-15T13:19:11.052Z">
+<meta property="article:modified_time" content="2023-09-15T17:53:36.806Z">
 <meta property="article:author" content="Eric Lu">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -337,6 +337,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -349,6 +371,10 @@
 
           
 
+          
+              <div class="post-description">
+                  记录了std::move的意义与应用
+              </div>
           
 
         </div>
@@ -364,7 +390,41 @@
       
 
       
-        
+        <h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p><strong>左值</strong>：表达式结束后依然存在的持久对象(在<strong>内存</strong>中占有确定位置)</p>
+<p><strong>右值</strong>：表达式结束时不再存在的临时对象(不在<strong>内存</strong>中占有确定位置）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> val; <span class="comment">// 对变量val进行了定义，故在栈上会给val分配内存地址</span></span><br><span class="line">val = <span class="number">4</span>; <span class="comment">// “=”要求左边是可修改的左值，4是临时参与运算的值，一般在寄存器上暂存</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="std-move函数"><a href="#std-move函数" class="headerlink" title="std::move函数"></a>std::move函数</h2><ul>
+<li>将一个左值转换成右值引用，从而可以调用右值引用的拷贝构造函数</li>
+<li>针对有在堆上为对象分配内存的情况</li>
+<li>该函数仅仅做了**类型转换(可理解为static_cast转换),**对性能无影响。</li>
+<li><strong>真正的移动操作</strong>在移动构造函数或者移动赋值操作符中发生，我们可以在自己的类中实现移动语义，避免深拷贝</li>
+</ul>
+<h2 id="Why-std-move"><a href="#Why-std-move" class="headerlink" title="Why std::move"></a>Why std::move</h2><p>右值引用和std::move广泛应用于在STL和自定义类中<strong>实现移动语义，避免拷贝，从而提升程序性能</strong></p>
+<p>在没有右值引用之前，一个简单的数组类通常实现如下:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Array</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">int</span> size) : <span class="built_in">size_</span>(size) &#123;</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝构造</span></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        size_ = temp_array.size_;</span><br><span class="line">        data_ = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size_; i ++) &#123;</span><br><span class="line">            data_[i] = temp_array.data_[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝赋值,不可避免</span></span><br><span class="line">    Array&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] data_;</span><br><span class="line"> </span><br><span class="line">        size_ = temp_array.size_;</span><br><span class="line">        data_ = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size_; i ++) &#123;</span><br><span class="line">            data_[i] = temp_array.data_[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    ~<span class="built_in">Array</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] data_;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> *data_;</span><br><span class="line">    <span class="type">int</span> size_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>改进：提供一个<code>移动构造函数</code>，把被拷贝者的数据移动过来，之后丢弃被拷贝者，从而避免深拷贝</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Array</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">int</span> size) : <span class="built_in">size_</span>(size) &#123;</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝构造</span></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝赋值</span></span><br><span class="line">    Array&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 移动构造函数，可以浅拷贝</span></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp; temp_array, <span class="type">bool</span> move) &#123;</span><br><span class="line">        data_ = temp_array.data_;</span><br><span class="line">        size_ = temp_array.size_;</span><br><span class="line">        <span class="comment">// 为防止temp_array析构时delete data，提前置空其data_      </span></span><br><span class="line">        temp_array.data_ = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line"> </span><br><span class="line">    ~<span class="built_in">Array</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span> [] data_;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> *data_;</span><br><span class="line">    <span class="type">int</span> size_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这样做有三个问题：</p>
+<ol>
+<li>不优雅，表示移动语义需要一个额外的参数</li>
+<li><code>temp_array</code>是const左值引用，无法被修改为<code>nullptr</code></li>
+<li>即使把函数参数改成非const <code>Array&amp; temp_array</code>，由于左值引用不能接右值，无法使用<code>Array a = Array(Array(), true);</code></li>
+</ol>
+<p>最终，使用右值引用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Array a;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 左值a，用std::move转化为右值</span></span><br><span class="line">    <span class="function">Array <span class="title">b</span><span class="params">(std::move(a))</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="std-move在STL容器中的应用"><a href="#std-move在STL容器中的应用" class="headerlink" title="std::move在STL容器中的应用"></a>std::move在STL容器中的应用</h2><p>在STL的很多容器中，都实现了以<strong>右值引用为参数</strong>的<strong>移动构造函数</strong>和<strong>移动赋值重载函数</strong>，或者其他函数</p>
+<p>最常见的如std::vector的<code>push_back</code>和<code>emplace_back</code>。参数为左值引用意味着拷贝，为右值引用意味着移动。</p>
+<p>有些STL类只有移动构造函数，比如<code>unique_ptr</code>，因此只能移动(转移内部对象所有权，或者叫浅拷贝)，不能深拷贝</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shadow-lr/p/Introduce_Std-move.html">https://www.cnblogs.com/shadow-lr/p/Introduce_Std-move.html</a></p>
+
       
     </div>
     
@@ -454,8 +514,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -476,6 +545,15 @@
               </div>
             
 
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
             
 
             
@@ -506,6 +584,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">前置知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-move%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">std::move函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-std-move"><span class="nav-number">3.</span> <span class="nav-text">Why std::move</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-move%E5%9C%A8STL%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">std::move在STL容器中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1021,6 +1115,79 @@
   
 
   
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
 
 </body>
 </html>

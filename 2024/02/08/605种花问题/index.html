@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="题目">
+<meta name="description" content="记录了我的力扣题解">
 <meta property="og:type" content="article">
-<meta property="og:title" content="剑指Offer 24 反转链表">
-<meta property="og:url" content="http://example.com/2023/08/14/offer24/index.html">
+<meta property="og:title" content="605种花问题">
+<meta property="og:url" content="http://example.com/2024/02/08/605%E7%A7%8D%E8%8A%B1%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="题目">
+<meta property="og:description" content="记录了我的力扣题解">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-08-13T19:01:12.000Z">
-<meta property="article:modified_time" content="2023-09-15T12:50:35.173Z">
+<meta property="article:published_time" content="2024-02-08T14:49:51.000Z">
+<meta property="article:modified_time" content="2024-02-08T15:24:06.647Z">
 <meta property="article:author" content="Eric Lu">
 <meta property="article:tag" content="leetcode">
 <meta name="twitter:card" content="summary">
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2023/08/14/offer24/"/>
+  <link rel="canonical" href="http://example.com/2024/02/08/605种花问题/"/>
 
 
 
 
 
-  <title>剑指Offer 24 反转链表 | Eric Lu</title>
+  <title>605种花问题 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/14/offer24/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/08/605%E7%A7%8D%E8%8A%B1%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">剑指Offer 24 反转链表</h1>
+          <h1 class="post-title" itemprop="name headline">605种花问题</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-08-14T03:01:12+08:00">
-                2023-08-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-02-08T22:49:51+08:00">
+                2024-02-08
               </time>
             
 
@@ -337,6 +337,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -349,6 +371,10 @@
 
           
 
+          
+              <div class="post-description">
+                  记录了我的力扣题解
+              </div>
           
 
         </div>
@@ -364,7 +390,22 @@
       
 
       
-        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1>
+        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>假设有一个很长的花坛，一部分地块种植了花，另一部分却没有。可是，花不能种植在相邻的地块上，它们会争夺水源，两者都会死去。</p>
+<p>给你一个整数数组 <code>flowerbed</code> 表示花坛，由若干 <code>0</code> 和 <code>1</code> 组成，其中 <code>0</code> 表示没种植花，<code>1</code> 表示种植了花。另有一个数 <code>n</code> ，能否在不打破种植规则的情况下种入 <code>n</code> 朵花？能则返回 <code>true</code> ，不能则返回 <code>false</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：flowerbed = [1,0,0,0,1], n = 1</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：flowerbed = [1,0,0,0,1], n = 2</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>首先使用贪心策略，在不打破规则的情况下种植尽可能多的花，然后判断可以种入的花的最大数量是否≥n。</p>
+<p>可以种花的条件是<strong>数组中出现连续的三个0</strong>。</p>
+<p>此题的边界情况需要额外注意，若可种植的位置<code>flowerbed[i]</code>在数组的开头或末尾，通过忽略<code>flowerbed[i-1]</code>或<code>flowerbed[i+1]</code>进行条件的判断是比较方便的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">canPlaceFlowers</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; flowerbed, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> len=flowerbed.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>((i==<span class="number">0</span> || flowerbed[i<span class="number">-1</span>]==<span class="number">0</span>) &amp;&amp; flowerbed[i]==<span class="number">0</span> &amp;&amp;(i+<span class="number">1</span>==len || flowerbed[i+<span class="number">1</span>]==<span class="number">0</span>))&#123;</span><br><span class="line">                ans++;</span><br><span class="line">                flowerbed[i]=<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans&gt;=n;     </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     
@@ -394,15 +435,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2023/09/23/emplace-back/" rel="next" title="emplace_back Vs push_back">
+                <i class="fa fa-chevron-left"></i> emplace_back Vs push_back
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2023/09/15/std-move/" rel="prev" title="std::move">
-                std::move <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -534,7 +575,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a></li></ol></div>
             
 
           </div>

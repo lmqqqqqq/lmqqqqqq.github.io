@@ -121,4 +121,43 @@
         <tag>leetcode</tag>
       </tags>
   </entry>
+  <entry>
+    <title>334递增的三元子序列</title>
+    <url>/2024/02/08/334%E9%80%92%E5%A2%9E%E7%9A%84%E4%B8%89%E5%85%83%E5%AD%90%E5%BA%8F%E5%88%97/</url>
+    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给你一个整数数组 <code>nums</code> ，判断这个数组中是否存在长度为 <code>3</code> 的递增子序列。</p>
+<p>如果存在这样的三元组下标 <code>(i, j, k)</code> 且满足 <code>i &lt; j &lt; k</code> ，使得 <code>nums[i] &lt; nums[j] &lt; nums[k]</code> ，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [1,2,3,4,5]</span><br><span class="line">输出：true</span><br><span class="line">解释：任何 i &lt; j &lt; k 的三元组都满足题意</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [5,4,3,2,1]</span><br><span class="line">输出：false</span><br><span class="line">解释：不存在满足题意的三元组</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [2,1,5,0,4,6]</span><br><span class="line">输出：true</span><br><span class="line">解释：三元组 (3, 4, 5) 满足题意，因为 nums[3] == 0 &lt; nums[4] == 4 &lt; nums[5] == 6</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><h2 id="方法一：双向遍历"><a href="#方法一：双向遍历" class="headerlink" title="方法一：双向遍历"></a>方法一：双向遍历</h2><p>存在三元组下标 <code>(i, j, k)</code> 等价于<code>nums[j]</code>左边的最小值小于<code>nums[j]</code>，<code>nums[j]</code>右边的最大值大于<code>nums[j]</code>。</p>
+<p>因此，可以维护数组中每个元素左边的最小值和右边的最大值。</p>
+<p>创建两个长度为<code>n</code>的数组<code>leftmin</code>和<code>rightmax</code>，通过一次正向遍历计算<code>leftmin</code>，一次反向遍历计算<code>rightmax</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">increasingTriplet</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(n&lt;<span class="number">3</span>)&#123;</span><br><span class="line">             <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">leftmin</span><span class="params">(n,<span class="number">0</span>)</span>, <span class="title">rightmax</span><span class="params">(n,<span class="number">0</span>)</span></span>;</span><br><span class="line">        leftmin[<span class="number">0</span>]=nums[<span class="number">0</span>];     </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">            leftmin[i]=<span class="built_in">min</span>(nums[i],leftmin[i<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        rightmax[n<span class="number">-1</span>]=nums[n<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-2</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            rightmax[i]=<span class="built_in">max</span>(nums[i], rightmax[i+<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n<span class="number">-1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(leftmin[i<span class="number">-1</span>]&lt;nums[i]&amp;&amp;nums[i]&lt;rightmax[i+<span class="number">1</span>])&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二：贪心"><a href="#方法二：贪心" class="headerlink" title="方法二：贪心"></a>方法二：贪心</h2><p>贪心策略：在遍历数组的过程中，维护两个变量<code>first</code>和 <code>second</code>，使得<code>first&lt;second</code>恒成立，并使<code>first</code>和 <code>second</code>尽可能小。</p>
+<p>在寻找第三个元素<code>num</code>时，如果</p>
+<ol>
+<li><code>num&gt;second</code>, 那么三元子序列找到了。</li>
+<li><code>first&lt;num&lt;=second</code>，那么将<code>second</code>更新为<code>num</code>。在当前位置未找到<code>third</code>的情况下，将<code>second</code>变得更小将更有利于找到<code>third</code>。</li>
+<li><code>num&lt;=first</code>，那么将<code>first</code>更新为<code>num</code>。虽然此时<code>first</code>在<code>second</code>的后面，但并不妨碍。在更新前，已经存在<code>first‘&lt;second</code>，此时能否成功找到<code>third</code>，只与<code>second</code>有关，和更新完的<code>first</code>并没有关系。</li>
+</ol>
+<p>**使用贪心可以将空间复杂度优化为：O(1)**。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">increasingTriplet</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">size</span>()&lt;<span class="number">3</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> first = nums[<span class="number">0</span>], second = INT_MAX;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;nums.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&gt;second)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[i]&gt;first &amp;&amp; nums[i]&lt;=second)&#123;</span><br><span class="line">                second=nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                first=nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
 </search>

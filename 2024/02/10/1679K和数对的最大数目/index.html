@@ -81,13 +81,13 @@
 
 <meta name="description" content="记录了我的力扣题解">
 <meta property="og:type" content="article">
-<meta property="og:title" content="334递增的三元子序列">
-<meta property="og:url" content="http://example.com/2024/02/08/334%E9%80%92%E5%A2%9E%E7%9A%84%E4%B8%89%E5%85%83%E5%AD%90%E5%BA%8F%E5%88%97/index.html">
+<meta property="og:title" content="1679K和数对的最大数目">
+<meta property="og:url" content="http://example.com/2024/02/10/1679K%E5%92%8C%E6%95%B0%E5%AF%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/index.html">
 <meta property="og:site_name" content="Eric Lu">
 <meta property="og:description" content="记录了我的力扣题解">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-02-08T15:30:01.000Z">
-<meta property="article:modified_time" content="2024-02-08T17:47:11.690Z">
+<meta property="article:published_time" content="2024-02-10T09:09:40.000Z">
+<meta property="article:modified_time" content="2024-02-10T09:43:32.841Z">
 <meta property="article:author" content="Eric Lu">
 <meta property="article:tag" content="leetcode">
 <meta name="twitter:card" content="summary">
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2024/02/08/334递增的三元子序列/"/>
+  <link rel="canonical" href="http://example.com/2024/02/10/1679K和数对的最大数目/"/>
 
 
 
 
 
-  <title>334递增的三元子序列 | Eric Lu</title>
+  <title>1679K和数对的最大数目 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/08/334%E9%80%92%E5%A2%9E%E7%9A%84%E4%B8%89%E5%85%83%E5%AD%90%E5%BA%8F%E5%88%97/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/10/1679K%E5%92%8C%E6%95%B0%E5%AF%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">334递增的三元子序列</h1>
+          <h1 class="post-title" itemprop="name headline">1679K和数对的最大数目</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-02-08T23:30:01+08:00">
-                2024-02-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-02-10T17:09:40+08:00">
+                2024-02-10
               </time>
             
 
@@ -390,33 +390,46 @@
       
 
       
-        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给你一个整数数组 <code>nums</code> ，判断这个数组中是否存在长度为 <code>3</code> 的递增子序列。</p>
-<p>如果存在这样的三元组下标 <code>(i, j, k)</code> 且满足 <code>i &lt; j &lt; k</code> ，使得 <code>nums[i] &lt; nums[j] &lt; nums[k]</code> ，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> 。</p>
+<p>每一步操作中，你需要从数组中选出和为 <code>k</code> 的两个整数，并将它们移出数组。</p>
+<p>返回你可以对数组执行的最大操作数。</p>
 <p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1,2,3,4,5]</span><br><span class="line">输出：true</span><br><span class="line">解释：任何 i &lt; j &lt; k 的三元组都满足题意</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1,2,3,4], k = 5</span><br><span class="line">输出：2</span><br><span class="line">解释：开始时 nums = [1,2,3,4]：</span><br><span class="line">- 移出 1 和 4 ，之后 nums = [2,3]</span><br><span class="line">- 移出 2 和 3 ，之后 nums = []</span><br><span class="line">不再有和为 5 的数对，因此最多执行 2 次操作。</span><br></pre></td></tr></table></figure>
 
 <p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [5,4,3,2,1]</span><br><span class="line">输出：false</span><br><span class="line">解释：不存在满足题意的三元组</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [3,1,3,4,3], k = 6</span><br><span class="line">输出：1</span><br><span class="line">解释：开始时 nums = [3,1,3,4,3]：</span><br><span class="line">- 移出前两个 3 ，之后nums = [1,4,3]</span><br><span class="line">不再有和为 6 的数对，因此最多执行 1 次操作。</span><br></pre></td></tr></table></figure>
 
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [2,1,5,0,4,6]</span><br><span class="line">输出：true</span><br><span class="line">解释：三元组 (3, 4, 5) 满足题意，因为 nums[3] == 0 &lt; nums[4] == 4 &lt; nums[5] == 6</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><h2 id="方法一：双向遍历"><a href="#方法一：双向遍历" class="headerlink" title="方法一：双向遍历"></a>方法一：双向遍历</h2><p>存在三元组下标 <code>(i, j, k)</code> 等价于<code>nums[j]</code>左边的最小值小于<code>nums[j]</code>，<code>nums[j]</code>右边的最大值大于<code>nums[j]</code>。</p>
-<p>因此，可以维护数组中每个元素左边的最小值和右边的最大值。</p>
-<p>创建两个长度为<code>n</code>的数组<code>leftmin</code>和<code>rightmax</code>，通过一次正向遍历计算<code>leftmin</code>，一次反向遍历计算<code>rightmax</code>。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">increasingTriplet</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span>(n&lt;<span class="number">3</span>)&#123;</span><br><span class="line">             <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">leftmin</span><span class="params">(n,<span class="number">0</span>)</span>, <span class="title">rightmax</span><span class="params">(n,<span class="number">0</span>)</span></span>;</span><br><span class="line">        leftmin[<span class="number">0</span>]=nums[<span class="number">0</span>];     </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">            leftmin[i]=<span class="built_in">min</span>(nums[i],leftmin[i<span class="number">-1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        rightmax[n<span class="number">-1</span>]=nums[n<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-2</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            rightmax[i]=<span class="built_in">max</span>(nums[i], rightmax[i+<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n<span class="number">-1</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(leftmin[i<span class="number">-1</span>]&lt;nums[i]&amp;&amp;nums[i]&lt;rightmax[i+<span class="number">1</span>])&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="方法二：贪心"><a href="#方法二：贪心" class="headerlink" title="方法二：贪心"></a>方法二：贪心</h2><p>贪心策略：在遍历数组的过程中，维护两个变量<code>first</code>和 <code>second</code>，使得<code>first&lt;second</code>恒成立，并使<code>first</code>和 <code>second</code>尽可能小。</p>
-<p>在寻找第三个元素<code>num</code>时，如果</p>
-<ol>
-<li><code>num&gt;second</code>, 那么三元子序列找到了。</li>
-<li><code>first&lt;num&lt;=second</code>，那么将<code>second</code>更新为<code>num</code>。在当前位置未找到<code>third</code>的情况下，将<code>second</code>变得更小将更有利于找到<code>third</code>。</li>
-<li><code>num&lt;=first</code>，那么将<code>first</code>更新为<code>num</code>。虽然此时<code>first</code>在<code>second</code>的后面，但并不妨碍。在更新前，已经存在<code>first‘&lt;second</code>，此时能否成功找到<code>third</code>，只与<code>second</code>有关，和更新完的<code>first</code>并没有关系。</li>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10^5</code></li>
+<li><code>1 &lt;= nums[i] &lt;= 10^9</code></li>
+<li><code>1 &lt;= k &lt;= 10^9</code></li>
+</ul>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><h2 id="方法一：双指针"><a href="#方法一：双指针" class="headerlink" title="方法一：双指针"></a>方法一：双指针</h2><ol>
+<li><p>先将数据排序，用两个指针分别指向数组的头尾。</p>
+</li>
+<li><p>再将两个指针指向的数求和。</p>
+<ul>
+<li>若和大于<code>k</code>，右指针左移，使和变小。</li>
+<li>若和小于<code>k</code>，左指针右移，使和变大。</li>
+<li>若和等于<code>k</code>，则两个指针都往中间移动，<code>ans</code>+1。</li>
+</ul>
+</li>
+<li><p>循环步骤2直至左指针大于右指针。</p>
+</li>
 </ol>
-<p>**使用贪心可以将空间复杂度优化为：O(1)**。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">increasingTriplet</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.<span class="built_in">size</span>()&lt;<span class="number">3</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> first = nums[<span class="number">0</span>], second = INT_MAX;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;nums.<span class="built_in">size</span>();i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&gt;second)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[i]&gt;first &amp;&amp; nums[i]&lt;=second)&#123;</span><br><span class="line">                second=nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                first=nums[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxOperations</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(),nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="type">int</span> left=<span class="number">0</span>, right=nums.<span class="built_in">size</span>()<span class="number">-1</span>;</span><br><span class="line">        <span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(left&lt;right)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[left]+nums[right]==k)&#123;</span><br><span class="line">                ans++;</span><br><span class="line">                left++;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[left]+nums[right]&lt;k)&#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二：哈希表"><a href="#方法二：哈希表" class="headerlink" title="方法二：哈希表"></a>方法二：哈希表</h2><p>使用哈希表统计每个整数出现的次数，(x,k−x) 这两个数最多可以被移出 <em>min</em>⁡( count(x), count(k-x) )次。</p>
+<p><strong>当2x&#x3D;k时，需要特殊判断</strong>。</p>
+<p>需要注意的是：</p>
+<ul>
+<li>访问一个未在<code>unordered_map</code>或 <code>map</code> 中存在的键，那么会自动创建该键，并将value初始化为默认值。</li>
+<li>在<code>map</code>中，插入、删除和查找操作的时间复杂度是 <em>O</em>(log<em>n</em>)，在<code>unordered_map</code>中，是 <em>O</em>(1)。</li>
+<li><code>count()</code> 和 <code>find()</code> 成员函数都是用于检查某个键是否存在的方法，<code>count()</code> 返回的是键的出现次数（0 或 1），<code>find()</code> 返回的是指向键值对的迭代器。</li>
+<li>此题k的数量级为10^9, 因此不能遍历1-k的所有整数，而应该遍历哈希表中的所有键值对。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxOperations</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; m;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> num: nums) &#123;</span><br><span class="line">            m[num]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> [key,value]:m)&#123;</span><br><span class="line">            <span class="keyword">if</span>(key*<span class="number">2</span>==k)&#123;</span><br><span class="line">                ans+=value/<span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(key*<span class="number">2</span>&lt;k &amp;&amp; m.<span class="built_in">count</span>(k-key))&#123;</span><br><span class="line">                ans+=<span class="built_in">min</span>(value,m[k-key]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -448,8 +461,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2024/02/08/605%E7%A7%8D%E8%8A%B1%E9%97%AE%E9%A2%98/" rel="next" title="605种花问题">
-                <i class="fa fa-chevron-left"></i> 605种花问题
+              <a href="/2024/02/09/11%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/" rel="next" title="11盛最多水的容器">
+                <i class="fa fa-chevron-left"></i> 11盛最多水的容器
               </a>
             
           </div>
@@ -457,10 +470,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2024/02/09/283%E7%A7%BB%E5%8A%A8%E9%9B%B6/" rel="prev" title="283移动零">
-                283移动零 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -592,7 +601,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%8F%8C%E5%90%91%E9%81%8D%E5%8E%86"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：双向遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%B4%AA%E5%BF%83"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：贪心</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%8F%8C%E6%8C%87%E9%92%88"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：双指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：哈希表</span></a></li></ol></li></ol></div>
             
 
           </div>

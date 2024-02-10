@@ -213,4 +213,56 @@
         <tag>leetcode</tag>
       </tags>
   </entry>
+  <entry>
+    <title>1679K和数对的最大数目</title>
+    <url>/2024/02/10/1679K%E5%92%8C%E6%95%B0%E5%AF%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/</url>
+    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> 。</p>
+<p>每一步操作中，你需要从数组中选出和为 <code>k</code> 的两个整数，并将它们移出数组。</p>
+<p>返回你可以对数组执行的最大操作数。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [1,2,3,4], k = 5</span><br><span class="line">输出：2</span><br><span class="line">解释：开始时 nums = [1,2,3,4]：</span><br><span class="line">- 移出 1 和 4 ，之后 nums = [2,3]</span><br><span class="line">- 移出 2 和 3 ，之后 nums = []</span><br><span class="line">不再有和为 5 的数对，因此最多执行 2 次操作。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [3,1,3,4,3], k = 6</span><br><span class="line">输出：1</span><br><span class="line">解释：开始时 nums = [3,1,3,4,3]：</span><br><span class="line">- 移出前两个 3 ，之后nums = [1,4,3]</span><br><span class="line">不再有和为 6 的数对，因此最多执行 1 次操作。</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10^5</code></li>
+<li><code>1 &lt;= nums[i] &lt;= 10^9</code></li>
+<li><code>1 &lt;= k &lt;= 10^9</code></li>
+</ul>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><h2 id="方法一：双指针"><a href="#方法一：双指针" class="headerlink" title="方法一：双指针"></a>方法一：双指针</h2><ol>
+<li><p>先将数据排序，用两个指针分别指向数组的头尾。</p>
+</li>
+<li><p>再将两个指针指向的数求和。</p>
+<ul>
+<li>若和大于<code>k</code>，右指针左移，使和变小。</li>
+<li>若和小于<code>k</code>，左指针右移，使和变大。</li>
+<li>若和等于<code>k</code>，则两个指针都往中间移动，<code>ans</code>+1。</li>
+</ul>
+</li>
+<li><p>循环步骤2直至左指针大于右指针。</p>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxOperations</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(),nums.<span class="built_in">end</span>());</span><br><span class="line">        <span class="type">int</span> left=<span class="number">0</span>, right=nums.<span class="built_in">size</span>()<span class="number">-1</span>;</span><br><span class="line">        <span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(left&lt;right)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[left]+nums[right]==k)&#123;</span><br><span class="line">                ans++;</span><br><span class="line">                left++;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[left]+nums[right]&lt;k)&#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二：哈希表"><a href="#方法二：哈希表" class="headerlink" title="方法二：哈希表"></a>方法二：哈希表</h2><p>使用哈希表统计每个整数出现的次数，(x,k−x) 这两个数最多可以被移出 <em>min</em>⁡( count(x), count(k-x) )次。</p>
+<p><strong>当2x&#x3D;k时，需要特殊判断</strong>。</p>
+<p>需要注意的是：</p>
+<ul>
+<li>访问一个未在<code>unordered_map</code>或 <code>map</code> 中存在的键，那么会自动创建该键，并将value初始化为默认值。</li>
+<li>在<code>map</code>中，插入、删除和查找操作的时间复杂度是 <em>O</em>(log<em>n</em>)，在<code>unordered_map</code>中，是 <em>O</em>(1)。</li>
+<li><code>count()</code> 和 <code>find()</code> 成员函数都是用于检查某个键是否存在的方法，<code>count()</code> 返回的是键的出现次数（0 或 1），<code>find()</code> 返回的是指向键值对的迭代器。</li>
+<li>此题k的数量级为10^9, 因此不能遍历1-k的所有整数，而应该遍历哈希表中的所有键值对。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxOperations</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        unordered_map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; m;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> num: nums) &#123;</span><br><span class="line">            m[num]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> [key,value]:m)&#123;</span><br><span class="line">            <span class="keyword">if</span>(key*<span class="number">2</span>==k)&#123;</span><br><span class="line">                ans+=value/<span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(key*<span class="number">2</span>&lt;k &amp;&amp; m.<span class="built_in">count</span>(k-key))&#123;</span><br><span class="line">                ans+=<span class="built_in">min</span>(value,m[k-key]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
 </search>

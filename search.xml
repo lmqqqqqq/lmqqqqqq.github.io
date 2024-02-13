@@ -265,4 +265,45 @@
         <tag>leetcode</tag>
       </tags>
   </entry>
+  <entry>
+    <title>790多米诺和托米诺平铺</title>
+    <url>/2024/02/13/790%E5%A4%9A%E7%B1%B3%E8%AF%BA%E5%92%8C%E6%89%98%E7%B1%B3%E8%AF%BA%E5%B9%B3%E9%93%BA/</url>
+    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>有两种形状的瓷砖：一种是 <code>2 x 1</code> 的多米诺形，另一种是形如 “L” 的托米诺形。两种形状都可以旋转。</p>
+<p>给定整数 n ，返回可以平铺 <code>2 x n</code> 的面板的方法的数量。<strong>返回对</strong> <code>10^9 + 7</code> <strong>取模</strong> 的值。</p>
+<p>平铺指的是每个正方形都必须有瓷砖覆盖。两个平铺不同，当且仅当面板上有四个方向上的相邻单元中的两个，使得恰好有一个平铺有一个瓷砖占据两个正方形。</p>
+<p><strong>示例 1:</strong></p>
+<img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202402132147164.png" alt="image-20240213211831661" style="zoom:50%;" />
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: n = 3</span><br><span class="line">输出: 5</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: n = 1</span><br><span class="line">输出: 1</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>令在第 <em>i</em> 列前面的正方形都被瓷砖覆盖，在第 <em>i</em> 列后面的正方形都没有被瓷砖覆盖的状态为 dp[i]。</p>
+<p>我最初的方法是建立dp[i] 与dp[i-1]，dp[i-2]， dp[i-3]的递推关系。但这样会产生重复的覆盖方案。是错误的。</p>
+<p>正确的递推关系为：</p>
+<p>第 <em>i</em> 列的正方形有四种被覆盖的情况：</p>
+<ul>
+<li><p>一个正方形都没有被覆盖，记为状态 0；</p>
+</li>
+<li><p>只有上方的正方形被覆盖，记为状态 1；</p>
+</li>
+<li><p>只有下方的正方形被覆盖，记为状态 2；</p>
+</li>
+<li><p>上下两个正方形都被覆盖，记为状态 3。</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202402132200417.png" alt="image-20240213215452077"></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">numTilings</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> mod=<span class="number">1e9</span>+<span class="number">7</span>;</span><br><span class="line">        <span class="type">long</span> <span class="type">long</span> dp[<span class="number">1005</span>][<span class="number">4</span>];</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">3</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            dp[i][<span class="number">0</span>]=dp[i<span class="number">-1</span>][<span class="number">3</span>];</span><br><span class="line">            dp[i][<span class="number">1</span>]=(dp[i<span class="number">-1</span>][<span class="number">0</span>]+dp[i<span class="number">-1</span>][<span class="number">2</span>])%mod;</span><br><span class="line">            dp[i][<span class="number">2</span>]=(dp[i<span class="number">-1</span>][<span class="number">0</span>]+dp[i<span class="number">-1</span>][<span class="number">1</span>])%mod;</span><br><span class="line">            dp[i][<span class="number">3</span>]=(dp[i<span class="number">-1</span>][<span class="number">1</span>]+dp[i<span class="number">-1</span>][<span class="number">2</span>]+dp[i<span class="number">-1</span>][<span class="number">3</span>]+dp[i<span class="number">-1</span>][<span class="number">0</span>])%mod;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n][<span class="number">3</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
 </search>

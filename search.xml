@@ -279,4 +279,61 @@
         <tag>STL</tag>
       </tags>
   </entry>
+  <entry>
+    <title>并查集</title>
+    <url>/2024/02/26/%E5%B9%B6%E6%9F%A5%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h1><p>并查集主要用来解决<strong>元素分组</strong>的问题。它支持两种操作：</p>
+<ul>
+<li><strong>合并（Union）</strong>：把两个不相交的集合合并成一个集合。</li>
+<li><strong>查询（Find）</strong>：查询两个元素是否在同一个集合中。</li>
+</ul>
+<p>并查集的核心思想是<strong>用集合中的一个元素代表整个集合</strong>。</p>
+<img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202402270258364.png" alt="image-20240227011735365" style="zoom: 50%;" />
+
+<p>并查集是一个<strong>树状</strong>的结构，要寻找集合中的代表元素，只需要向上一层一层访问父节点。</p>
+<p>通过以上知识，可以先写出最简单版本的并查集代码。</p>
+<p><strong>初始化</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> fa[MAXN];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span> <span class="params">(<span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        fa[i]=i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用数组fa来存储每个元素的父节点。</p>
+<p><strong>查询</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(fa[x]==x)</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">find</span>(fa[x]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用递归一层一层访问父节点，直到根节点。<strong>通过判断两个元素的根节点是否一致，得出他们是否属于同一集合。</strong></p>
+<p><strong>合并</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    fa[<span class="built_in">find</span>(i)]=<span class="built_in">find</span>(j);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="路径压缩"><a href="#路径压缩" class="headerlink" title="路径压缩"></a>路径压缩</h2><p>最简单的并查集效率是比较低的。merge（2，4）会使得树变成一条长链。随着链的增长，从底部找到跟节点将越来越慢。</p>
+<img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202402270258866.png" alt="image-20240227015949913" style="zoom:50%;" />
+
+<p>最好能够使得每个元素到根节点的距离尽可能短，距离只有1。</p>
+<img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202402270258319.png" alt="image-20240227020533562" style="zoom:50%;" />
+
+<p>为了实现路径压缩，<strong>只需要在查询的过程中，把沿途的每个节点的父节点都设为根节点</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 路径压缩</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(fa[x]==x)</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        fa[x]=<span class="built_in">find</span>(fa[x]); <span class="comment">// 父节点设为根节点</span></span><br><span class="line">        <span class="keyword">return</span> fa[x];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="按秩合并"><a href="#按秩合并" class="headerlink" title="按秩合并"></a>按秩合并</h2><p>虽然经过了路径压缩这一优化，但并查集的结构仍然可能比较复杂。因为路径压缩只在查询时进行，而且只压缩一条路径。对于以下这种情况：</p>
+<img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202402270259336.png" alt="image-20240227023419143" style="zoom:67%;" />
+
+<p>merge（7，8）有两种选择：把7的父节点设为8，或把8的父节点设为7。</p>
+<p>显然后者好。要是把7的父节点设为8，会使树的深度增加1，每个节点寻找根节点的路径都会变长。虽然有路径压缩这一优化方案，但优化方案本身也是耗时的。如果把8的父节点设为7，就不会影响到原来的树结构。</p>
+<p>所以，<strong>应该把简单的树往复杂的树上合并</strong>。</p>
+<p>用一个数组depth记录每个根节点对应的树的深度。合并时比较两个根节点的depth，把depth小的往depth大的合并。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x=<span class="built_in">find</span>(i), y=<span class="built_in">find</span>(j);</span><br><span class="line">    <span class="keyword">if</span>(depth[x]&lt;=depth[y])&#123;</span><br><span class="line">        fa[x]=y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        fa[y]=x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(depth[x]==depth[y] &amp;&amp; x!=y)&#123;</span><br><span class="line">        depth[y]++;  <span class="comment">//如果两个根节点深度相同，合并后的根节点深度+1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://zhuanlan.zhihu.com/p/93647900">https://zhuanlan.zhihu.com/p/93647900</a></p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>data structures</tag>
+      </tags>
+  </entry>
 </search>

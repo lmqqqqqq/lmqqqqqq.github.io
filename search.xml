@@ -433,4 +433,47 @@
         <tag>Effective Modern C++</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Effective Modern C++ Item 2</title>
+    <url>/2024/02/29/Effective%20Modern%20C++%20Item%202/</url>
+    <content><![CDATA[<h1 id="Understand-auto-type-deduction"><a href="#Understand-auto-type-deduction" class="headerlink" title="Understand auto type deduction"></a><strong>Understand <code>auto</code> type deduction</strong></h1><p>除了一个例外，<strong>auto</strong>类型推导就是模版类型推导。</p>
+<p>模板类型推导使用下面这个函数模板，</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(ParmaType param)</span></span>;</span><br><span class="line"><span class="built_in">f</span>(expr);                        <span class="comment">//使用一些表达式调用f</span></span><br></pre></td></tr></table></figure>
+
+<p>而当一个变量使用<code>auto</code>进行声明时，<code>auto</code>扮演了模板中<code>T</code>的角色，变量的类型说明符扮演了<code>ParamType</code>的角色。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> x = <span class="number">27</span>;</span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span> cx = x;</span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span>&amp; rx = x;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以认为生成了一些模板并推断出 <strong>auto</strong> 关键字的类型, 如下所示:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;            <span class="comment">//概念化的模板用来推导x的类型</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func_for_x</span><span class="params">(T param)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">func_for_x</span>(<span class="number">27</span>);                 <span class="comment">//概念化调用：</span></span><br><span class="line">                                <span class="comment">//param的推导类型是x的类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;            <span class="comment">//概念化的模板用来推导cx的类型</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func_for_cx</span><span class="params">(<span class="type">const</span> T param)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">func_for_cx</span>(x);                 <span class="comment">//概念化调用：</span></span><br><span class="line">                                <span class="comment">//param的推导类型是cx的类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;            <span class="comment">//概念化的模板用来推导rx的类型</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func_for_rx</span><span class="params">(<span class="type">const</span> T &amp; param)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">func_for_rx</span>(x);                 <span class="comment">//概念化调用：</span></span><br><span class="line">                                <span class="comment">//param的推导类型是rx的类型</span></span><br></pre></td></tr></table></figure>
+
+<p>Item1描述的三个情景稍作修改就能适用于auto：</p>
+<ul>
+<li>情景一：类型说明符是一个指针或引用但不是通用引用</li>
+<li>情景二：类型说明符一个通用引用</li>
+<li>情景三：类型说明符既不是指针也不是引用</li>
+</ul>
+<p>上文中描述了情况一和情况三，现在描述情况二：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span>&amp;&amp; uref1 = x;               <span class="comment">//x是int左值，</span></span><br><span class="line">                                <span class="comment">//所以uref1类型为int&amp;</span></span><br><span class="line"><span class="keyword">auto</span>&amp;&amp; uref2 = cx;              <span class="comment">//cx是const int左值，</span></span><br><span class="line">                                <span class="comment">//所以uref2类型为const int&amp;</span></span><br><span class="line"><span class="keyword">auto</span>&amp;&amp; uref3 = <span class="number">27</span>;              <span class="comment">//27是int右值，</span></span><br><span class="line">                                <span class="comment">//所以uref3类型为int&amp;&amp;</span></span><br></pre></td></tr></table></figure>
+
+<p>数组和函数名退化为指针同样适用于<code>auto</code>类型推导，这里就不举例了。</p>
+<p>但是, 这里有一个例外需要我们注意：当<strong>auto</strong>声明变量的初始值设定项括在花括号”<strong>{}</strong>“中时, 推导类型为 <strong>std::initializer_list</strong>. 如果不能推导出这样的类型, 代码将被拒绝编译。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> x1 = <span class="number">27</span>;                   <span class="comment">//类型是int，值是27</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">x2</span><span class="params">(<span class="number">27</span>)</span></span>;                    <span class="comment">//同上</span></span><br><span class="line"><span class="keyword">auto</span> x3 = &#123; <span class="number">27</span> &#125;;               <span class="comment">//类型是std::initializer_list&lt;int&gt;，</span></span><br><span class="line">                                <span class="comment">//值是&#123; 27 &#125;</span></span><br><span class="line"><span class="keyword">auto</span> x4&#123; <span class="number">27</span> &#125;;                  <span class="comment">//同上</span></span><br><span class="line"><span class="keyword">auto</span> x5 = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3.0</span> &#125;;        <span class="comment">//错误！无法推导std::initializer_list&lt;T&gt;中的T</span></span><br></pre></td></tr></table></figure>
+
+<p>这里发生了两种类型推导。一种是由于<code>auto</code>的使用：使用花括号进行初始化的x5必须被推导为<code>std::initializer_list</code>。但是<code>std::initializer_list</code>是一个模板。<code>std::initializer_list&lt;T&gt;</code>会被某种类型<code>T</code>实例化，所以这意味着<code>T</code>也会被推导。 在这个例子中推导之所以失败，是因为在花括号中的值并不是同一种类型。</p>
+<p>因此<code>auto</code>类型推导和模板类型推导的真正区别在于，<code>auto</code>类型推导假定花括号表示<code>std::initializer_list</code>而模板类型不能推导花括号。</p>
+<p>C++14允许<code>auto</code>用于函数返回值并会被推导，C++14的<em>lambda</em>函数也允许在形参声明中使用<code>auto</code>。但是在这些情况下<code>auto</code>使用<strong>模板类型推导</strong>的规则，而不是<code>auto</code>类型推导。因此, 具有返回花括号初始化器的<strong>auto</strong>返回类型的函数将无法编译:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">createInitList</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;         <span class="comment">//错误！不能推导&#123; 1, 2, 3 &#125;的类型</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; v;</span><br><span class="line"><span class="keyword">auto</span> resetV = [&amp;v](<span class="type">const</span> <span class="keyword">auto</span>&amp; newValue)&#123; v = newValue; &#125;;        <span class="comment">//C++14</span></span><br><span class="line"><span class="built_in">resetV</span>(&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;);            <span class="comment">//错误！不能推导&#123; 1, 2, 3 &#125;的类型</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h3><ul>
+<li><strong>auto</strong>类型推导通常与模板类型推导相同, 但<strong>auto</strong>类型推导假定花括号(“<strong>{}</strong>“)初始化表示 <strong>std::initializer_list</strong>,而模板类型推导则不然。</li>
+<li>函数返回类型或 lambda 参数中的 <strong>auto</strong> 表示模板类型推导，而不是<strong>auto</strong>类型推导。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
 </search>

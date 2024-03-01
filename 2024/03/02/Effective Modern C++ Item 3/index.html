@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,14 +79,17 @@
 
 
 
-<meta name="description" content="hello">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Eric Lu">
-<meta property="og:url" content="http://example.com/archives/2024/index.html">
+<meta name="description" content="记录了我对Item3 Understand decltype的学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Modern C++ Item 3">
+<meta property="og:url" content="http://example.com/2024/03/02/Effective%20Modern%20C++%20Item%203/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="hello">
+<meta property="og:description" content="记录了我对Item3 Understand decltype的学习笔记">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-01T18:22:28.000Z">
+<meta property="article:modified_time" content="2024-03-01T19:58:49.054Z">
 <meta property="article:author" content="Eric Lu">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
 
 
@@ -117,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/archives/2024/"/>
+  <link rel="canonical" href="http://example.com/2024/03/02/Effective Modern C++ Item 3/"/>
 
 
 
 
 
-  <title>Archive | Eric Lu</title>
+  <title>Effective Modern C++ Item 3 | Eric Lu</title>
   
 
 
@@ -142,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -280,407 +283,222 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/02/Effective%20Modern%20C++%20Item%203/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Lu">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 3</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-02T02:22:28+08:00">
+                2024-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 12 posts in total. Keep on posting.
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2024">2024</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/03/02/Effective%20Modern%20C++%20Item%203/" itemprop="url">
-              
-                <span itemprop="name">Effective Modern C++ Item 3</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-03-02T02:22:28+08:00"
-              content="2024-03-02" >
-          03-02
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
+              <div class="post-description">
+                  记录了我对Item3 Understand decltype的学习笔记
+              </div>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/29/Effective%20Modern%20C++%20Item%202/" itemprop="url">
-              
-                <span itemprop="name">Effective Modern C++ Item 2</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-29T00:16:52+08:00"
-              content="2024-02-29" >
-          02-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/28/Effective%20Modern%20C++%20Item%201/" itemprop="url">
-              
-                <span itemprop="name">Effective Modern C++ Item 1</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-28T01:06:14+08:00"
-              content="2024-02-28" >
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
+      
+        <h1 id="Understand-decltype"><a href="#Understand-decltype" class="headerlink" title="Understand decltype"></a><strong>Understand decltype</strong></h1><p>给定名称或表达式, <code>decltype</code>就会告诉你这个名字或者表达式的类型。<code>decltype</code>只是简单的返回名字或者表达式的类型，很正常。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> i = <span class="number">0</span>;                <span class="comment">//decltype(i)是const int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">f</span><span class="params">(<span class="type">const</span> Widget&amp; w)</span></span>;        <span class="comment">//decltype(w)是const Widget&amp;</span></span><br><span class="line">                                <span class="comment">//decltype(f)是bool(const Widget&amp;)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span>&#123;</span><br><span class="line">    <span class="type">int</span> x,y;                    <span class="comment">//decltype(Point::x)是int</span></span><br><span class="line">&#125;;                              <span class="comment">//decltype(Point::y)是int</span></span><br><span class="line"></span><br><span class="line">Widget w;                       <span class="comment">//decltype(w)是Widget</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">f</span>(w))…                      <span class="comment">//decltype(f(w))是bool</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;            <span class="comment">//std::vector的简化版本</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">vector</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    …</span><br><span class="line">    T&amp; <span class="keyword">operator</span>[](std::<span class="type">size_t</span> index);</span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">vector&lt;<span class="type">int</span>&gt; v;                  <span class="comment">//decltype(v)是vector&lt;int&gt;</span></span><br><span class="line">…</span><br><span class="line"><span class="keyword">if</span> (v[<span class="number">0</span>] == <span class="number">0</span>)…                 <span class="comment">//decltype(v[0])是int&amp;</span></span><br></pre></td></tr></table></figure>
 
 
+
+<p>在C++11中，<code>auto</code> 不能被用作函数模板的返回类型。因此<code>decltype</code>最主要的用途就是用于声明函数模板，而这个函数返回类型依赖于形参类型。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>在 C++14 中，<code>auto</code> 不能用作函数的返回类型，除非使用的是 C++14 中的泛型 lambda 表达式。此外，使用 <code>auto</code> 作为函数返回类型还有一些限制，主要涉及到函数模板和非静态成员函数的情况。</p>
+<ol>
+<li><p><strong>函数模板中的auto返回类型</strong>：在函数模板中，如果使用 <code>auto</code> 作为返回类型，编译器无法推导出实际类型，因为模板的参数类型可能在调用时才能确定。因此，在函数模板中使用 <code>auto</code> 作为返回类型是不合法的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不合法的例子</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">foo</span><span class="params">(T x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>非静态成员函数中的auto返回类型</strong>：C++ 中，非静态成员函数必须与类的实例相关联才能被调用。因此，在类定义时，非静态成员函数的声明只是描述了函数的接口，而不涉及任何特定实例的情况。返回类型的推导需要考虑类的实例。这些信息直到使用对象调用该函数时才会完全可见，因此在函数声明处无法推导出完整的返回类型，非静态成员函数不能使用 <code>auto</code> 作为返回类型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不合法的例子</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">auto</span> <span class="title">myFunc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">42</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</blockquote>
+<p><strong>C++11</strong> 中的第一个版本是:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container, <span class="keyword">typename</span> Index&gt;    <span class="comment">//可以工作，</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">authAndAccess</span><span class="params">(Container&amp; c, Index i)</span>       <span class="comment">//但是需要改良</span></span></span><br><span class="line"><span class="function">    -&gt;<span class="title">decltype</span><span class="params">(c[i])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">authenticateUser</span>();</span><br><span class="line">    <span class="keyword">return</span> c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数名称前面的<code>auto</code>不会做任何的类型推导工作。相反的，他使用了C++11的<strong>尾置返回类型</strong>语法，它允许使用入参作为返回类型推导的一部分。</p>
+<p>C++11允许自动推导单一语句的<em>lambda</em>表达式的返回类型， C++14扩展到允许自动推导所有的<em>lambda</em>表达式和函数。因此在 <strong>C++14</strong> 中, 我们可以省略尾置返回类型而只使用 <strong>auto</strong>。先贡献一个<strong>错误</strong>版本：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container, <span class="keyword">typename</span> Index&gt;    <span class="comment">//C++14版本，</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">authAndAccess</span><span class="params">(Container&amp; c, Index i)</span>       <span class="comment">//不正确！！！</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">authenticateUser</span>();</span><br><span class="line">    <span class="keyword">return</span> c[i];                                <span class="comment">//从c[i]中推导返回类型</span></span><br><span class="line">&#125;</span><br><span class="line">std::deque&lt;<span class="type">int</span>&gt; d;</span><br><span class="line"><span class="built_in">authAndAccess</span>(d, <span class="number">5</span>) = <span class="number">10</span>;               <span class="comment">//认证用户，返回d[5]，然后把10赋值给它</span></span><br><span class="line">                                        <span class="comment">//无法通过编译器！</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里, <strong>d[5]</strong> 理应返回一个 <strong>int&amp;</strong>, 但是<strong>auto</strong>类型推导（此处实际是模板类型推导的那套规则）<strong>去除了了引用</strong>, 因此推导出了 <strong>int</strong> 的返回类型，是个<strong>右值</strong>。</p>
+<p>所以我们需要使用<code>decltype</code>类型推导来推导它的返回值。<strong>decltype(auto)</strong> 的规则: <strong>auto</strong> 指定推导类型, 但推导时应该使用<strong>decltype</strong> 规则。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container, <span class="keyword">typename</span> Index&gt;    <span class="comment">//C++14版本，可以工作，但是还需要改良</span></span><br><span class="line"><span class="function"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) <span class="title">authAndAccess</span><span class="params">(Container&amp; c, Index i)</span>            </span></span><br><span class="line"><span class="function"></span>&#123;                                               </span><br><span class="line">    <span class="built_in">authenticateUser</span>();</span><br><span class="line">    <span class="keyword">return</span> c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>decltype(auto)</code>的使用不仅仅局限于函数返回类型，也可以对初始化表达式使用<code>decltype</code>推导的规则：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Widget w;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> Widget&amp; cw = w;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> myWidget1 = cw;                    <span class="comment">//auto类型推导</span></span><br><span class="line">                                        <span class="comment">//myWidget1的类型为Widget</span></span><br><span class="line"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) myWidget2 = cw;          <span class="comment">//decltype类型推导</span></span><br><span class="line">                                        <span class="comment">//myWidget2的类型是const Widget&amp;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>目前容器是通过<strong>左值引入一个非const</strong>传递的, 如果也可以传递右值就好了。我们可以为右值容器定义一个重载版本, 但维护起来太麻烦了。这时我们需要<strong>通用引用</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container, <span class="keyword">typename</span> Index&gt;    <span class="comment">//最终的C++14版本</span></span><br><span class="line"><span class="function"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) <span class="title">authAndAccess</span><span class="params">(Container&amp;&amp; c, Index i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">authenticateUser</span>();</span><br><span class="line">    <span class="keyword">return</span> std::forward&lt;Container&gt;(c)[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container, <span class="keyword">typename</span> Index&gt;    <span class="comment">//最终的C++11版本</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">authAndAccess</span><span class="params">(Container&amp;&amp; c, Index i)</span> -&gt;<span class="title">decltype</span><span class="params">(std::forward&lt;Container&gt;(c)[i])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">authenticateUser</span>();</span><br><span class="line">    <span class="keyword">return</span> std::forward&lt;Container&gt;(c)[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>decltype</code>有一些特殊情况：对于单纯的变量名，<code>decltype</code>只会返回变量的声明类型。然而，对于比单纯的变量名更复杂的左值表达式，<code>decltype</code>报告的类型始终是左值引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) <span class="title">f1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">0</span>;</span><br><span class="line">    …</span><br><span class="line">    <span class="keyword">return</span> x;                            <span class="comment">//decltype(x）是int，所以f1返回int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">decltype</span>(<span class="keyword">auto</span>) <span class="title">f2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> (x);                          <span class="comment">//decltype((x))是int&amp;，所以f2返回int&amp;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h3><ul>
+<li><strong>decltype</strong> 总是不加修改的产生变量或者表达式的类型。</li>
+<li>对于名称以外的类型 <strong>T</strong> 的左值表达式, decltype 总是返回类型 <strong>T&amp;</strong>.</li>
+<li>C++14 支持 <strong>decltype(auto)</strong>, 它与 <strong>auto</strong> 一样, 从其初始值设定项中推导类型, 但它使用 <strong>decltype</strong> 规则执行类型推导。</li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/27/215%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/" itemprop="url">
-              
-                <span itemprop="name">215数组中的第K个最大元素</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-27T21:59:53+08:00"
-              content="2024-02-27" >
-          02-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/26/%E5%B9%B6%E6%9F%A5%E9%9B%86/" itemprop="url">
-              
-                <span itemprop="name">并查集</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-26T21:54:53+08:00"
-              content="2024-02-26" >
-          02-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/13/790%E5%A4%9A%E7%B1%B3%E8%AF%BA%E5%92%8C%E6%89%98%E7%B1%B3%E8%AF%BA%E5%B9%B3%E9%93%BA/" itemprop="url">
-              
-                <span itemprop="name">790多米诺和托米诺平铺</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-13T21:11:45+08:00"
-              content="2024-02-13" >
-          02-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/10/1679K%E5%92%8C%E6%95%B0%E5%AF%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E6%95%B0%E7%9B%AE/" itemprop="url">
-              
-                <span itemprop="name">1679K和数对的最大数目</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-10T17:09:40+08:00"
-              content="2024-02-10" >
-          02-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/09/11%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/" itemprop="url">
-              
-                <span itemprop="name">11盛最多水的容器</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-09T23:57:34+08:00"
-              content="2024-02-09" >
-          02-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/08/334%E9%80%92%E5%A2%9E%E7%9A%84%E4%B8%89%E5%85%83%E5%AD%90%E5%BA%8F%E5%88%97/" itemprop="url">
-              
-                <span itemprop="name">334递增的三元子序列</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-08T23:30:01+08:00"
-              content="2024-02-08" >
-          02-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2024/02/08/605%E7%A7%8D%E8%8A%B1%E9%97%AE%E9%A2%98/" itemprop="url">
-              
-                <span itemprop="name">605种花问题</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2024-02-08T22:49:51+08:00"
-              content="2024-02-08" >
-          02-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/02/29/Effective%20Modern%20C++%20Item%202/" rel="next" title="Effective Modern C++ Item 2">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -688,6 +506,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -708,8 +530,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -769,6 +600,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Understand-decltype"><span class="nav-number">1.</span> <span class="nav-text">Understand decltype</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E7%82%B9"><span class="nav-number">1.0.1.</span> <span class="nav-text">重点</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -902,6 +749,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

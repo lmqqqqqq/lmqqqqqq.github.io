@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="leetcode," />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="记录了我的力扣题解">
+<meta name="description" content="记录了我对Item4 Know how to view deduced types的学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="215数组中的第K个最大元素">
-<meta property="og:url" content="http://example.com/2024/02/27/215%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/index.html">
+<meta property="og:title" content="Effective Modern C++ Item 4">
+<meta property="og:url" content="http://example.com/2024/03/02/Effective%20Modern%20C++%20Item%204/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="记录了我的力扣题解">
+<meta property="og:description" content="记录了我对Item4 Know how to view deduced types的学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-02-27T13:59:53.000Z">
-<meta property="article:modified_time" content="2024-02-27T14:48:27.416Z">
+<meta property="article:published_time" content="2024-03-02T09:00:37.000Z">
+<meta property="article:modified_time" content="2024-03-02T09:56:50.974Z">
 <meta property="article:author" content="Eric Lu">
-<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2024/02/27/215数组中的第K个最大元素/"/>
+  <link rel="canonical" href="http://example.com/2024/03/02/Effective Modern C++ Item 4/"/>
 
 
 
 
 
-  <title>215数组中的第K个最大元素 | Eric Lu</title>
+  <title>Effective Modern C++ Item 4 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/27/215%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/02/Effective%20Modern%20C++%20Item%204/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">215数组中的第K个最大元素</h1>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 4</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-02-27T21:59:53+08:00">
-                2024-02-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-02T17:00:37+08:00">
+                2024-03-02
               </time>
             
 
@@ -349,8 +349,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">algorithm</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -373,7 +373,7 @@
 
           
               <div class="post-description">
-                  记录了我的力扣题解
+                  记录了我对Item4 Know how to view deduced types的学习笔记
               </div>
           
 
@@ -390,26 +390,27 @@
       
 
       
-        <h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定整数数组 <code>nums</code> 和整数 <code>k</code>，请返回数组中第 <code>**k**</code> 个最大的元素。</p>
-<p>请注意，你需要找的是数组排序后的第 <code>k</code> 个最大的元素，而不是第 <code>k</code> 个不同的元素。</p>
-<p>你必须设计并实现时间复杂度为 <code>O(n)</code> 的算法解决此问题。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,2,1,5,6,4], k = 2</span><br><span class="line">输出: 5</span><br></pre></td></tr></table></figure>
+        <h1 id="Know-how-to-view-deduced-types"><a href="#Know-how-to-view-deduced-types" class="headerlink" title="Know how to view deduced types"></a><strong>Know how to view deduced types</strong></h1><p>在 C++ 程序中, 有很多方法可以查看类型推导的结果：编辑代码的时候，在编译期间，在运行时。</p>
+<h3 id="IDE-编译器"><a href="#IDE-编译器" class="headerlink" title="IDE 编译器"></a><strong>IDE 编译器</strong></h3><p>在IDE中的代码编辑器通常可以显示程序代码中变量，函数，参数的类型。为此，代码必须处于可编译状态，因为IDE之所以能提供这些信息是因为一个C++编译器（或者至少是前端中的一个部分）运行于IDE中。</p>
+<h3 id="编译器诊断"><a href="#编译器诊断" class="headerlink" title="编译器诊断"></a><strong>编译器诊断</strong></h3><p>另一个获得推导结果的方法是使用编译器出错时提供的错误消息。</p>
+<p>举个例子，可以声明一个类模板但<strong>不定义</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;                <span class="comment">//只对TD进行声明</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TD</span>;                           <span class="comment">//TD == &quot;Type Displayer&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> theAnswer = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">auto</span> x = theAnswer;</span><br><span class="line"><span class="keyword">auto</span> y = &amp;theAnswer;</span><br><span class="line"></span><br><span class="line">TD&lt;<span class="keyword">decltype</span>(x)&gt; xType;              <span class="comment">//引出包含x和y</span></span><br><span class="line">TD&lt;<span class="keyword">decltype</span>(y)&gt; yType;              <span class="comment">//的类型的错误消息</span></span><br></pre></td></tr></table></figure>
 
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,2,3,1,2,4,5,5,6], k = 4</span><br><span class="line">输出: 4</span><br></pre></td></tr></table></figure>
+<p>如果尝试实例化这个类模板就会引出一个错误消息：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">error: <span class="string">&#x27;xType&#x27;</span> uses undefined <span class="keyword">class</span> <span class="string">&#x27;TD&lt;int&gt;&#x27;</span></span><br><span class="line">error: <span class="string">&#x27;yType&#x27;</span> uses undefined <span class="keyword">class</span> <span class="string">&#x27;TD&lt;const int *&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>一道非常经典的题目。</p>
-<h2 id="方法一：快速排序"><a href="#方法一：快速排序" class="headerlink" title="方法一：快速排序"></a>方法一：快速排序</h2><p>每一次快速排序之后，可以确定一个元素的最终位置<code>q</code>，保证 <code>[1，q-1]</code> 中的每个元素都小于<code>a[q]</code>，<code>[q+1，r]</code> 中的每个元素都大于<code>a[q]</code>。虽然区间内元素是乱序的，但没有关系。如果某次划分的元素的下标正好是<code>q</code>，那么就得到了答案。</p>
-<p>这道题和快速排序的区别是：此题只需要判断确定位置的元素下表与k的关系，并递归排序左&#x2F;右区间，不必同时排序两个区间。</p>
-<p>其中需要注意的是数组中有相同元素的情况，不要死循环了。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">quickselect</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l == r)</span><br><span class="line">            <span class="keyword">return</span> nums[k];</span><br><span class="line">        <span class="type">int</span> partition = nums[l], i = l - <span class="number">1</span>, j = r + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            <span class="keyword">do</span> i++; <span class="keyword">while</span> (nums[i] &lt; partition);</span><br><span class="line">            <span class="keyword">do</span> j--; <span class="keyword">while</span> (nums[j] &gt; partition);</span><br><span class="line">            <span class="keyword">if</span> (i &lt; j)</span><br><span class="line">                <span class="built_in">swap</span>(nums[i], nums[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (k &lt;= j)<span class="keyword">return</span> <span class="built_in">quickselect</span>(nums, l, j, k);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">quickselect</span>(nums, j + <span class="number">1</span>, r, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthLargest</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">quickselect</span>(nums, <span class="number">0</span>, n - <span class="number">1</span>, n - k);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="运行时输出"><a href="#运行时输出" class="headerlink" title="运行时输出"></a><strong>运行时输出</strong></h3><p>在运行时显示类型的一个非常基本的用法是通过 <strong>typeid</strong> 和<strong>std::type_info::name</strong>这两个内置函数:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="built_in">typeid</span>(x).<span class="built_in">name</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;  <span class="comment">//显示x和y的类型</span></span><br><span class="line">std::cout &lt;&lt; <span class="built_in">typeid</span>(y).<span class="built_in">name</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
+<p>然而<strong>std::type_info::name</strong>并不总是正确，<code>std::type_info::name</code>规范批准像传值形参一样来对待这些类型。</p>
+<p>Boost TypeIndex库（通常写作<strong>Boost.TypeIndex</strong>）是更好的选择：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/type_index.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">const</span> T&amp; param)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> std::cout;</span><br><span class="line">    <span class="keyword">using</span> boost::typeindex::type_id_with_cvr;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//显示T</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;T =     &quot;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">type_id_with_cvr</span>&lt;T&gt;().<span class="built_in">pretty_name</span>()</span><br><span class="line">         &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//显示param类型</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;param = &quot;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">type_id_with_cvr</span>&lt;<span class="keyword">decltype</span>(param)&gt;().<span class="built_in">pretty_name</span>()</span><br><span class="line">         &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-<h2 id="方法二：堆排序"><a href="#方法二：堆排序" class="headerlink" title="方法二：堆排序"></a>方法二：堆排序</h2><p>建立一个大根堆（aka <code>priority_queue</code>）,做 k-1 次删除操作之后，堆顶的元素就是答案。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">maxheap</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> i, <span class="type">int</span> heapsize)</span></span>&#123;</span><br><span class="line">        <span class="type">int</span> left=i*<span class="number">2</span>+<span class="number">1</span>, right=i*<span class="number">2</span>+<span class="number">2</span>, largest=i;</span><br><span class="line">        <span class="keyword">if</span>(left&lt;heapsize &amp;&amp; nums[left]&gt;nums[largest])&#123;</span><br><span class="line">            largest=left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(right&lt;heapsize &amp;&amp; nums[right]&gt;nums[largest])&#123;</span><br><span class="line">            largest=right;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(largest!=i)&#123;</span><br><span class="line">            <span class="built_in">swap</span>(nums[i],nums[largest]);</span><br><span class="line">            <span class="built_in">maxheap</span>(nums,largest,heapsize);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">buildheap</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> heapsize)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=heapsize/<span class="number">2</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            <span class="built_in">maxheap</span>(nums,i,heapsize);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthLargest</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> heapsize=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">buildheap</span>(nums,heapsize);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=nums.<span class="built_in">size</span>()<span class="number">-1</span>;i&gt;nums.<span class="built_in">size</span>()-k;i--)&#123;</span><br><span class="line">            <span class="built_in">swap</span>(nums[<span class="number">0</span>],nums[i]);</span><br><span class="line">            heapsize--;</span><br><span class="line">            <span class="built_in">maxheap</span>(nums,<span class="number">0</span>,heapsize);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
+<p><code>boost::typeindex::type_id_with_cvr</code>获取一个类型实参（我们想获得相应信息的那个类型），它不消除实参的<code>const</code>，<code>volatile</code>和引用修饰符（因此模板名中有“<code>with_cvr</code>”）。</p>
+<h3 id="重点"><a href="#重点" class="headerlink" title="重点"></a><strong>重点</strong></h3><ul>
+<li>使用 IDE 编辑器、编译器错误消息和 Boost TypeIndex 库经常可以方便地看到推导类型。</li>
+<li>一些工具的结果可能既无帮助也不准确, 因此了解 <strong>C++</strong> 的类型推导规则仍然是必不可少的。</li>
+</ul>
 
       
     </div>
@@ -427,7 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
           
         </div>
       
@@ -440,8 +441,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2024/02/26/%E5%B9%B6%E6%9F%A5%E9%9B%86/" rel="next" title="并查集">
-                <i class="fa fa-chevron-left"></i> 并查集
+              <a href="/2024/03/02/Effective%20Modern%20C++%20Item%203/" rel="next" title="Effective Modern C++ Item 3">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 3
               </a>
             
           </div>
@@ -449,10 +450,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2024/02/28/Effective%20Modern%20C++%20Item%201/" rel="prev" title="Effective Modern C++ Item 1">
-                Effective Modern C++ Item 1 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -584,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="nav-number">2.1.</span> <span class="nav-text">方法一：快速排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="nav-number">2.2.</span> <span class="nav-text">方法二：堆排序</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Know-how-to-view-deduced-types"><span class="nav-number">1.</span> <span class="nav-text">Know how to view deduced types</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IDE-%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-number">1.0.1.</span> <span class="nav-text">IDE 编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E8%AF%8A%E6%96%AD"><span class="nav-number">1.0.2.</span> <span class="nav-text">编译器诊断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E8%BE%93%E5%87%BA"><span class="nav-number">1.0.3.</span> <span class="nav-text">运行时输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E7%82%B9"><span class="nav-number">1.0.4.</span> <span class="nav-text">重点</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

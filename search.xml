@@ -537,4 +537,36 @@
         <tag>Effective Modern C++</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Effective Modern C++ Item 4</title>
+    <url>/2024/03/02/Effective%20Modern%20C++%20Item%204/</url>
+    <content><![CDATA[<h1 id="Know-how-to-view-deduced-types"><a href="#Know-how-to-view-deduced-types" class="headerlink" title="Know how to view deduced types"></a><strong>Know how to view deduced types</strong></h1><p>在 C++ 程序中, 有很多方法可以查看类型推导的结果：编辑代码的时候，在编译期间，在运行时。</p>
+<h3 id="IDE-编译器"><a href="#IDE-编译器" class="headerlink" title="IDE 编译器"></a><strong>IDE 编译器</strong></h3><p>在IDE中的代码编辑器通常可以显示程序代码中变量，函数，参数的类型。为此，代码必须处于可编译状态，因为IDE之所以能提供这些信息是因为一个C++编译器（或者至少是前端中的一个部分）运行于IDE中。</p>
+<h3 id="编译器诊断"><a href="#编译器诊断" class="headerlink" title="编译器诊断"></a><strong>编译器诊断</strong></h3><p>另一个获得推导结果的方法是使用编译器出错时提供的错误消息。</p>
+<p>举个例子，可以声明一个类模板但<strong>不定义</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;                <span class="comment">//只对TD进行声明</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TD</span>;                           <span class="comment">//TD == &quot;Type Displayer&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> theAnswer = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">auto</span> x = theAnswer;</span><br><span class="line"><span class="keyword">auto</span> y = &amp;theAnswer;</span><br><span class="line"></span><br><span class="line">TD&lt;<span class="keyword">decltype</span>(x)&gt; xType;              <span class="comment">//引出包含x和y</span></span><br><span class="line">TD&lt;<span class="keyword">decltype</span>(y)&gt; yType;              <span class="comment">//的类型的错误消息</span></span><br></pre></td></tr></table></figure>
+
+<p>如果尝试实例化这个类模板就会引出一个错误消息：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">error: <span class="string">&#x27;xType&#x27;</span> uses undefined <span class="keyword">class</span> <span class="string">&#x27;TD&lt;int&gt;&#x27;</span></span><br><span class="line">error: <span class="string">&#x27;yType&#x27;</span> uses undefined <span class="keyword">class</span> <span class="string">&#x27;TD&lt;const int *&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="运行时输出"><a href="#运行时输出" class="headerlink" title="运行时输出"></a><strong>运行时输出</strong></h3><p>在运行时显示类型的一个非常基本的用法是通过 <strong>typeid</strong> 和<strong>std::type_info::name</strong>这两个内置函数:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="built_in">typeid</span>(x).<span class="built_in">name</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;  <span class="comment">//显示x和y的类型</span></span><br><span class="line">std::cout &lt;&lt; <span class="built_in">typeid</span>(y).<span class="built_in">name</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然而<strong>std::type_info::name</strong>并不总是正确，<code>std::type_info::name</code>规范批准像传值形参一样来对待这些类型。</p>
+<p>Boost TypeIndex库（通常写作<strong>Boost.TypeIndex</strong>）是更好的选择：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/type_index.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">const</span> T&amp; param)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> std::cout;</span><br><span class="line">    <span class="keyword">using</span> boost::typeindex::type_id_with_cvr;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//显示T</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;T =     &quot;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">type_id_with_cvr</span>&lt;T&gt;().<span class="built_in">pretty_name</span>()</span><br><span class="line">         &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//显示param类型</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;param = &quot;</span></span><br><span class="line">         &lt;&lt; <span class="built_in">type_id_with_cvr</span>&lt;<span class="keyword">decltype</span>(param)&gt;().<span class="built_in">pretty_name</span>()</span><br><span class="line">         &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>boost::typeindex::type_id_with_cvr</code>获取一个类型实参（我们想获得相应信息的那个类型），它不消除实参的<code>const</code>，<code>volatile</code>和引用修饰符（因此模板名中有“<code>with_cvr</code>”）。</p>
+<h3 id="重点"><a href="#重点" class="headerlink" title="重点"></a><strong>重点</strong></h3><ul>
+<li>使用 IDE 编辑器、编译器错误消息和 Boost TypeIndex 库经常可以方便地看到推导类型。</li>
+<li>一些工具的结果可能既无帮助也不准确, 因此了解 <strong>C++</strong> 的类型推导规则仍然是必不可少的。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
 </search>

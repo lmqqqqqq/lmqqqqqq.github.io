@@ -395,21 +395,15 @@
 <p>你必须设计并实现时间复杂度为 <code>O(n)</code> 的算法解决此问题。</p>
 <p><strong>示例 1:</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,2,1,5,6,4], k = 2</span><br><span class="line">输出: 5</span><br></pre></td></tr></table></figure>
-
 <p><strong>示例 2:</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [3,2,3,1,2,4,5,5,6], k = 4</span><br><span class="line">输出: 4</span><br></pre></td></tr></table></figure>
-
 <h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><p>一道非常经典的题目。</p>
 <h2 id="方法一：快速排序"><a href="#方法一：快速排序" class="headerlink" title="方法一：快速排序"></a>方法一：快速排序</h2><p>每一次快速排序之后，可以确定一个元素的最终位置<code>q</code>，保证 <code>[1，q-1]</code> 中的每个元素都小于<code>a[q]</code>，<code>[q+1，r]</code> 中的每个元素都大于<code>a[q]</code>。虽然区间内元素是乱序的，但没有关系。如果某次划分的元素的下标正好是<code>q</code>，那么就得到了答案。</p>
-<p>这道题和快速排序的区别是：此题只需要判断确定位置的元素下表与k的关系，并递归排序左&#x2F;右区间，不必同时排序两个区间。</p>
+<p>这道题和快速排序的区别是：此题只需要判断确定位置的元素下表与k的关系，并递归排序左/右区间，不必同时排序两个区间。</p>
 <p>其中需要注意的是数组中有相同元素的情况，不要死循环了。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">quickselect</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l == r)</span><br><span class="line">            <span class="keyword">return</span> nums[k];</span><br><span class="line">        <span class="type">int</span> partition = nums[l], i = l - <span class="number">1</span>, j = r + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            <span class="keyword">do</span> i++; <span class="keyword">while</span> (nums[i] &lt; partition);</span><br><span class="line">            <span class="keyword">do</span> j--; <span class="keyword">while</span> (nums[j] &gt; partition);</span><br><span class="line">            <span class="keyword">if</span> (i &lt; j)</span><br><span class="line">                <span class="built_in">swap</span>(nums[i], nums[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (k &lt;= j)<span class="keyword">return</span> <span class="built_in">quickselect</span>(nums, l, j, k);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">quickselect</span>(nums, j + <span class="number">1</span>, r, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthLargest</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">quickselect</span>(nums, <span class="number">0</span>, n - <span class="number">1</span>, n - k);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="方法二：堆排序"><a href="#方法二：堆排序" class="headerlink" title="方法二：堆排序"></a>方法二：堆排序</h2><p>建立一个大根堆（aka <code>priority_queue</code>）,做 k-1 次删除操作之后，堆顶的元素就是答案。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">maxheap</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> i, <span class="type">int</span> heapsize)</span></span>&#123;</span><br><span class="line">        <span class="type">int</span> left=i*<span class="number">2</span>+<span class="number">1</span>, right=i*<span class="number">2</span>+<span class="number">2</span>, largest=i;</span><br><span class="line">        <span class="keyword">if</span>(left&lt;heapsize &amp;&amp; nums[left]&gt;nums[largest])&#123;</span><br><span class="line">            largest=left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(right&lt;heapsize &amp;&amp; nums[right]&gt;nums[largest])&#123;</span><br><span class="line">            largest=right;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(largest!=i)&#123;</span><br><span class="line">            <span class="built_in">swap</span>(nums[i],nums[largest]);</span><br><span class="line">            <span class="built_in">maxheap</span>(nums,largest,heapsize);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">buildheap</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> heapsize)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=heapsize/<span class="number">2</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            <span class="built_in">maxheap</span>(nums,i,heapsize);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findKthLargest</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;nums, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> heapsize=nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="built_in">buildheap</span>(nums,heapsize);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=nums.<span class="built_in">size</span>()<span class="number">-1</span>;i&gt;nums.<span class="built_in">size</span>()-k;i--)&#123;</span><br><span class="line">            <span class="built_in">swap</span>(nums[<span class="number">0</span>],nums[i]);</span><br><span class="line">            heapsize--;</span><br><span class="line">            <span class="built_in">maxheap</span>(nums,<span class="number">0</span>,heapsize);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -529,7 +523,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1101,6 +1095,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
 
   
 

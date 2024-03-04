@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="STL," />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="记录了emplace_back()与push_back()的区别">
+<meta name="description" content="记录了我对Item5 Prefer auto to explicit type declarations的学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="emplace_back Vs push_back">
-<meta property="og:url" content="http://example.com/2023/09/23/emplace-back/index.html">
+<meta property="og:title" content="Effective Modern C++ Item 5">
+<meta property="og:url" content="http://example.com/2024/03/04/Effective%20Modern%20C++%20Item%205/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="记录了emplace_back()与push_back()的区别">
+<meta property="og:description" content="记录了我对Item5 Prefer auto to explicit type declarations的学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-23T14:30:57.000Z">
-<meta property="article:modified_time" content="2023-09-23T16:38:25.814Z">
+<meta property="article:published_time" content="2024-03-04T15:48:17.000Z">
+<meta property="article:modified_time" content="2024-03-04T16:55:00.723Z">
 <meta property="article:author" content="Eric Lu">
-<meta property="article:tag" content="STL">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2023/09/23/emplace-back/"/>
+  <link rel="canonical" href="http://example.com/2024/03/04/Effective Modern C++ Item 5/"/>
 
 
 
 
 
-  <title>emplace_back Vs push_back | Eric Lu</title>
+  <title>Effective Modern C++ Item 5 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/23/emplace-back/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/04/Effective%20Modern%20C++%20Item%205/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">emplace_back Vs push_back</h1>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 5</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-09-23T22:30:57+08:00">
-                2023-09-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-04T23:48:17+08:00">
+                2024-03-04
               </time>
             
 
@@ -373,7 +373,7 @@
 
           
               <div class="post-description">
-                  记录了emplace_back()与push_back()的区别
+                  记录了我对Item5 Prefer auto to explicit type declarations的学习笔记
               </div>
           
 
@@ -390,31 +390,29 @@
       
 
       
-        <p><code>emplace_back()</code>是C++11的新特性</p>
-<h2 id="emplace-back-和push-back-的区别"><a href="#emplace-back-和push-back-的区别" class="headerlink" title="emplace_back()和push_back()的区别"></a>emplace_back()和push_back()的区别</h2><ol>
-<li><code>push_back()</code> 在vector尾部添加一个元素时，首先会创建一个临时对象，然后再将这个临时对象移动或拷贝到 vector 中<ul>
-<li>如果是拷贝的话，事后会自动销毁先前创建的这个临时元素</li>
+        <p>从 <strong>C++11</strong> 开始，<code>auto</code>变量从初始化表达式中推导出类型，这意味着我们必须显式地初始化一个变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x1;                         <span class="comment">//潜在的未初始化的变量</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">auto</span> x2;                        <span class="comment">//错误！必须要初始化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;                    <span class="comment">//没问题，x已经定义了</span></span><br></pre></td></tr></table></figure>
+<p>而且省去了很多打代码的麻烦。考虑以下两段执行相同操作的代码:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//对从b到e的所有元素使用</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b, It e)</span>           <span class="comment">//dwim（“do what I mean”）算法</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">typename</span> std::iterator_traits&lt;It&gt;::value_type currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//如之前一样</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b,It e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">auto</span> currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用Item2所述的<code>auto</code>类型推导技术，它甚至能表示一些只有编译器才知道的类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++11</span></span><br><span class="line"><span class="keyword">auto</span> derefUPLess = </span><br><span class="line">    [](<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p1,       <span class="comment">//用于std::unique_ptr</span></span><br><span class="line">       <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p2)       <span class="comment">//指向的Widget类型的</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;                      <span class="comment">//比较函数</span></span><br><span class="line"><span class="comment">// C++14</span></span><br><span class="line"><span class="keyword">auto</span> derefLess =                                </span><br><span class="line">    [](<span class="type">const</span> <span class="keyword">auto</span>&amp; p1,                          <span class="comment">//被任何像指针一样的东西</span></span><br><span class="line">       <span class="type">const</span> <span class="keyword">auto</span>&amp; p2)                          <span class="comment">//指向的值的比较函数</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;</span><br></pre></td></tr></table></figure>
+<p>但是，有人觉得不需要使用<code>auto</code>声明局部变量来保存一个闭包，可以使用<code>std::function</code>对象。</p>
+<p><code>std::function</code>是一个C++11标准模板库中的一个模板，它泛化了函数指针的概念。<code>std::function</code>可以指向任何可调用对象。但创建<code>std::function</code>对象非常麻烦，而且还可能需要更多内存来存储闭包（堆上）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::function&lt;<span class="type">bool</span>(<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;,</span><br><span class="line">                   <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;)&gt;</span><br><span class="line">derefUPLess = [](<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p1,</span><br><span class="line">                 <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p2)</span><br><span class="line">                &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;</span><br></pre></td></tr></table></figure>
+<p>使用<code>auto</code>除了可以避免未初始化的无效变量，省略冗长的声明类型，直接保存闭包外，还有一个好处是可以避免类型快捷方式有关的问题。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; v;</span><br><span class="line"><span class="type">unsigned</span> sz = v.<span class="built_in">size</span>();</span><br></pre></td></tr></table></figure>
+<p><code>v.size()</code>的标准返回类型是<code>std::vector&lt;int&gt;::size_type</code>。在<strong>Windows 32-bit</strong> <code>std::vector&lt;int&gt;::size_type</code>和<code>unsigned</code>是一样的大小，但是在<strong>Windows 64-bit</strong>上<code>std::vector&lt;int&gt;::size_type</code>是64位，<code>unsigned</code>是32位，这就会出问题。</p>
+<p>还有一个例子，考虑以下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::unordered_map&lt;std::string, <span class="type">int</span>&gt; m;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">const</span> std::pair&lt;std::string, <span class="type">int</span>&gt;&amp; p : m)</span><br><span class="line">&#123;</span><br><span class="line">    …                                   <span class="comment">//用p做一些事</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>std::unordered_map</code>的<em>key</em>是<code>const</code>的，所以<code>std::pair</code>的类型是<code>std::pair&lt;const std::string, int&gt;</code>。由于类型不一致，编译器会通过拷贝<code>m</code>中的对象创建一个临时对象，然后把<code>p</code>的引用绑定到这个临时对象上。在每个循环迭代结束时，临时对象将会销毁。</p>
+<p>使用<code>auto</code>可以避免这些很难被意识到的类型不匹配的错误：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">const</span> <span class="keyword">auto</span>&amp; p : m)</span><br><span class="line">&#123;</span><br><span class="line">    …                                   <span class="comment">//如之前一样</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样不仅代码更简洁，而且确保与<strong>std::unordered_map</strong>中真实<strong>pair</strong>的引用“绑定”, 而并不只是一个临时拷贝的引用。</p>
+<p><strong>重点</strong></p>
+<ul>
+<li><strong>auto</strong> 声明变量必须初始化, 通常它可以避免一些移植性和效率性的问题, 并可以简化重构, 且比明确指定类型的变量声明打更少的代码。</li>
+<li><strong>auto</strong>声明变量会受到Item2和Item2中描述的陷阱的影响。</li>
 </ul>
-</li>
-<li><code>emplace_back()</code> 是直接在 vector 尾部创建这个元素，省去了移动或者拷贝元素的过程</li>
-<li>但 <code>emplace_back()</code>并不是任何场景效率都比 <code>push_back()</code>高</li>
-</ol>
-<h2 id="emplace-back-效率更高的应用场景"><a href="#emplace-back-效率更高的应用场景" class="headerlink" title="emplace_back()效率更高的应用场景"></a>emplace_back()效率更高的应用场景</h2><p>在向 vector 中添加元素时（假设元素类型是一个类类型）</p>
-<ol>
-<li>如果添加的是类类型的有参构造函数的参数类型对应的变量：<ul>
-<li>如果通过 <code>push_back()</code> 方式添加，则会调用<strong>一次有参构造 + 一次移动构造</strong> ，如果移动构造不可用则为拷贝构造</li>
-<li>如果通过 <code>emplace_back()</code> 方式添加，则只会调用<strong>一次有参构造</strong></li>
-</ul>
-</li>
-<li>如果添加的是类类型的变量：<ul>
-<li>不论是通过 <code>push_back()</code> 方式还是 <code>emplace_back()</code> 方式，都只会调用<strong>一次拷贝构造</strong></li>
-</ul>
-</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span> (<span class="type">int</span> num) &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">this</span>-&gt;num = num;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Person</span> (<span class="type">const</span> Person &amp; p) &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">this</span>-&gt;num = p.num;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;num=&quot;</span> &lt;&lt; <span class="keyword">this</span>-&gt;num &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Person</span> (Person &amp;&amp; p) <span class="keyword">noexcept</span> &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">this</span>-&gt;num = p.num;</span><br><span class="line">        p.num = <span class="number">0</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;num=&quot;</span> &lt;&lt; <span class="keyword">this</span>-&gt;num &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ~<span class="built_in">Person</span> () &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test01</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Person <span class="title">p1</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    vector&lt;Person&gt; v;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">push_back</span>(<span class="number">10</span>);  <span class="comment">// 会调用一次有参构造+一次移动构造</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">emplace_back</span>(<span class="number">20</span>);  <span class="comment">// 会调用一次有参构造</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">push_back</span>(p1);  <span class="comment">// 会调用一次拷贝构造</span></span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">emplace_back</span>(p1);  <span class="comment">// 会调用一次拷贝构造</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">test01</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>以有参构造中的参数类型的变量作为实参来使用 <code>push_back()</code>和<code>emplace_back()</code> ，可以提升效率，但我认为这种实参形式不易于理解</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="http://c.biancheng.net/view/6826.html">http://c.biancheng.net/view/6826.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/unonoi/article/details/114680819?spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;utm_relevant_index=9">https://blog.csdn.net/unonoi/article/details/114680819?spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;utm_relevant_index=9</a></p>
 
       
     </div>
@@ -432,7 +430,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/STL/" rel="tag"># STL</a>
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
           
         </div>
       
@@ -445,8 +443,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2023/09/15/std-move/" rel="next" title="std::move">
-                <i class="fa fa-chevron-left"></i> std::move
+              <a href="/2024/03/04/435%E6%97%A0%E9%87%8D%E5%8F%A0%E5%8C%BA%E9%97%B4/" rel="next" title="435无重叠区间">
+                <i class="fa fa-chevron-left"></i> 435无重叠区间
               </a>
             
           </div>
@@ -454,10 +452,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2024/02/08/605%E7%A7%8D%E8%8A%B1%E9%97%AE%E9%A2%98/" rel="prev" title="605种花问题">
-                605种花问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -509,17 +503,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -579,22 +564,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#emplace-back-%E5%92%8Cpush-back-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">emplace_back()和push_back()的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#emplace-back-%E6%95%88%E7%8E%87%E6%9B%B4%E9%AB%98%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">emplace_back()效率更高的应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

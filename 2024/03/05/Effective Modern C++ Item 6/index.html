@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="STL," />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="记录了std::move的意义与应用">
+<meta name="description" content="记录了我对Item6 Use the explicitly typed initializer idiom when auto deduces undesired types的学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="std::move">
-<meta property="og:url" content="http://example.com/2023/09/15/std-move/index.html">
+<meta property="og:title" content="Effective Modern C++ Item 6">
+<meta property="og:url" content="http://example.com/2024/03/05/Effective%20Modern%20C++%20Item%206/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="记录了std::move的意义与应用">
+<meta property="og:description" content="记录了我对Item6 Use the explicitly typed initializer idiom when auto deduces undesired types的学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-15T13:18:41.000Z">
-<meta property="article:modified_time" content="2023-09-23T16:39:00.569Z">
+<meta property="article:published_time" content="2024-03-05T09:46:43.000Z">
+<meta property="article:modified_time" content="2024-03-05T15:01:20.820Z">
 <meta property="article:author" content="Eric Lu">
-<meta property="article:tag" content="STL">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2023/09/15/std-move/"/>
+  <link rel="canonical" href="http://example.com/2024/03/05/Effective Modern C++ Item 6/"/>
 
 
 
 
 
-  <title>std::move | Eric Lu</title>
+  <title>Effective Modern C++ Item 6 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/15/std-move/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/05/Effective%20Modern%20C++%20Item%206/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">std::move</h1>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 6</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-09-15T21:18:41+08:00">
-                2023-09-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-05T17:46:43+08:00">
+                2024-03-05
               </time>
             
 
@@ -373,7 +373,7 @@
 
           
               <div class="post-description">
-                  记录了std::move的意义与应用
+                  记录了我对Item6 Use the explicitly typed initializer idiom when auto deduces undesired types的学习笔记
               </div>
           
 
@@ -390,37 +390,25 @@
       
 
       
-        <h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p><strong>左值</strong>：表达式结束后依然存在的持久对象(在<strong>内存</strong>中占有确定位置)</p>
-<p><strong>右值</strong>：表达式结束时不再存在的临时对象(不在<strong>内存</strong>中占有确定位置）</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> val; <span class="comment">// 对变量val进行了定义，故在栈上会给val分配内存地址</span></span><br><span class="line">val = <span class="number">4</span>; <span class="comment">// “=”要求左边是可修改的左值，4是临时参与运算的值，一般在寄存器上暂存</span></span><br></pre></td></tr></table></figure>
-<h2 id="std-move函数"><a href="#std-move函数" class="headerlink" title="std::move函数"></a>std::move函数</h2><ul>
-<li>将一个左值转换成右值引用，从而可以调用右值引用的拷贝构造函数</li>
-<li>针对有在堆上为对象分配内存的情况</li>
-<li>该函数仅仅做了<strong>类型转换(可理解为static_cast转换),</strong>对性能无影响。</li>
-<li><strong>真正的移动操作</strong>在移动构造函数或者移动赋值操作符中发生，我们可以在自己的类中实现移动语义，避免深拷贝</li>
-<li><strong>被move的值有没有失效，关键看有没有调用移动构造函数，或者移动复制运算符</strong><ul>
-<li>单纯的<code>Foo &amp;&amp; f = std::move (x)</code>;  是不会调用移动构造或者移动赋值运算符的。 只是把右值给绑定到了<code>f</code>上。</li>
-<li><code>Foo t = std::move (x)</code>, 这样才会调用移动构造函数</li>
+        <h1 id="Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types"><a href="#Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types" class="headerlink" title="Use the explicitly typed initializer idiom when auto deduces undesired types"></a><strong>Use the explicitly typed initializer idiom when <code>auto</code> deduces undesired types</strong></h1><p>尽管 <strong>auto</strong> 相对于显式声明类型好处很多, 但还是有一些棘手的陷阱需要注意。</p>
+<p>假如我有一个函数，参数为<code>Widget</code>，返回一个<code>std::vector&lt;bool&gt;</code>，这里的<code>bool</code>表示<code>Widget</code>是否提供一个独有的特性。我们可以写这样的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::vector&lt;<span class="type">bool</span>&gt; <span class="title">features</span><span class="params">(<span class="type">const</span> Widget&amp; w)</span></span>;</span><br><span class="line">Widget w;</span><br><span class="line"><span class="type">bool</span> highPriority = <span class="built_in">features</span>(w)[<span class="number">5</span>];     <span class="comment">//w高优先级吗？</span></span><br><span class="line"><span class="built_in">processWidget</span>(w, highPriority);         <span class="comment">//根据它的优先级处理w</span></span><br></pre></td></tr></table></figure>
+<p>以上代码没有问题。但是使用<code>auto</code>代替<code>highPriority</code>的显式指定类型，就会出错：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> highPriority = <span class="built_in">features</span>(w)[<span class="number">5</span>];     <span class="comment">//w高优先级吗？</span></span><br><span class="line"><span class="built_in">processWidget</span>(w,highPriority);          <span class="comment">//未定义行为！</span></span><br></pre></td></tr></table></figure>
+<p>为什么是一个未定义行为呢？<code>std::vector&lt;bool&gt;</code>以紧凑的形式存储它的<code>bool</code>，每个<code>bool</code>占一个bit。<code>std::vector&lt;T&gt;</code>的<code>operator[]</code>理应返回一个<code>T&amp;</code>，但是C++禁止对<code>bit</code>s的引用。因此，有一个返回的代理对象(<strong>proxy</strong>)来模仿 <strong>bool</strong> 的行为。<strong>std::vector</strong>中<strong>operator[]</strong>的返回类型其实是<strong>std::vector::reference</strong>。</p>
+<p>在第一个版本中，<code>features</code>返回的<code>std::vector&lt;bool&gt;::reference</code>对象被隐式转换赋值给<code>bool</code>变量<code>highPriority</code>。</p>
+<p>而在第二个版本中，<code>auto</code>推导<code>highPriority</code>的类型为<code>std::vector&lt;bool&gt;::reference</code>，包含一个指向这些<em>bit</em>s的指针。<code>highPriority</code>是这个<code>std::vector&lt;bool&gt;::reference</code>的拷贝，所以也包含一个指针。在这个语句结束的时候<code>std::vector&lt;bool&gt;::reference</code>将会被销毁，因此作为临时变量的<code>highPriority</code>包含一个悬置的指针，会造成未定义行为。</p>
+<p>事实上, “代理(<strong>Proxy</strong>)”的设计模式是软件设计模式中历史最悠久的成员之一。一些代理类被设计于用以对客户可见。比如<code>std::shared_ptr</code>和<code>std::unique_ptr</code>。其他的代理类则或多或少不可见，比如<code>std::vector&lt;bool&gt;::reference</code>。</p>
+<p>不可见代理类里一些C++库用了表达式模板的黑科技，能够提高数值运算的效率。举个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Matrix sum = m1 + m2 + m3 + m4;</span><br></pre></td></tr></table></figure>
+<p>对两个<code>Matrix</code>对象使用<code>operator+</code>将会返回如<code>Sum&lt;Matrix, Matrix&gt;</code>这样的代理类而不是直接返回一个<code>Matrix</code>对象。上述表达式的结果可能是 <code>Sum&lt;Sum&lt;Sum&lt;Matrix, Matrix&gt;, Matrix&gt;, Matrix&gt;</code>, 如果需要具体求值时再一次性将其转换为 <strong>Matrix</strong> 对象，节省了计算次数。</p>
+<p><strong>不可见的代理类通常不适用于<code>auto</code></strong>，这样类型的对象的生命期通常不能活过一条语句。 更好的解决方案是使用显式类型初始器惯用法：使用<code>auto</code>声明一个变量，然后对表达式强制类型转换（<em>cast</em>）得出期望的推导结果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> highPriority = <span class="built_in">static_cast</span>&lt;<span class="type">bool</span>&gt;(<span class="built_in">features</span>(w)[<span class="number">5</span>]);</span><br><span class="line"><span class="keyword">auto</span> sum = <span class="built_in">static_cast</span>&lt;Matrix&gt;(m1 + m2 + m3 + m4);</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">calcEpsilon</span><span class="params">()</span></span>;                           </span><br><span class="line"><span class="keyword">auto</span> ep = <span class="built_in">static_cast</span>&lt;<span class="type">float</span>&gt;(<span class="built_in">calcEpsilon</span>());</span><br></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li>不可见的代理类(<strong>proxy</strong>)可能会导致 <strong>auto</strong> 从表达式推断出“错误”的类型。</li>
+<li>显式类型初始器惯用法强制<code>auto</code>推导出你想要的结果。</li>
 </ul>
-</li>
-</ul>
-<h2 id="Why-std-move"><a href="#Why-std-move" class="headerlink" title="Why std::move"></a>Why std::move</h2><p>右值引用和<code>std::move</code>广泛应用于在STL和自定义类中<strong>实现移动语义，避免拷贝，从而提升程序性能</strong></p>
-<p>在没有右值引用之前，一个简单的数组类通常实现如下:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Array</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">int</span> size) : <span class="built_in">size_</span>(size) &#123;</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝构造</span></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        size_ = temp_array.size_;</span><br><span class="line">        data_ = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size_; i ++) &#123;</span><br><span class="line">            data_[i] = temp_array.data_[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝赋值,不可避免</span></span><br><span class="line">    Array&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] data_;</span><br><span class="line"> </span><br><span class="line">        size_ = temp_array.size_;</span><br><span class="line">        data_ = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; size_; i ++) &#123;</span><br><span class="line">            data_[i] = temp_array.data_[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    ~<span class="built_in">Array</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] data_;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> *data_;</span><br><span class="line">    <span class="type">int</span> size_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>改进：提供一个<code>移动构造函数</code>，把被拷贝者的数据移动过来，之后丢弃被拷贝者，从而避免深拷贝</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Array</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">int</span> size) : <span class="built_in">size_</span>(size) &#123;</span><br><span class="line">        data = <span class="keyword">new</span> <span class="type">int</span>[size_];</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝构造</span></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 深拷贝赋值</span></span><br><span class="line">    Array&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 移动构造函数，可以浅拷贝</span></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp; temp_array, <span class="type">bool</span> move) &#123;</span><br><span class="line">        data_ = temp_array.data_;</span><br><span class="line">        size_ = temp_array.size_;</span><br><span class="line">        <span class="comment">// 为防止temp_array析构时delete data，提前置空其data_      </span></span><br><span class="line">        temp_array.data_ = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line"> </span><br><span class="line">    ~<span class="built_in">Array</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span> [] data_;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> *data_;</span><br><span class="line">    <span class="type">int</span> size_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这样做有三个问题：</p>
-<ol>
-<li>不优雅，表示移动语义需要一个额外的参数</li>
-<li><code>temp_array</code>是const左值引用，无法被修改为<code>nullptr</code></li>
-<li>即使把函数参数改成非const <code>Array&amp; temp_array</code>，由于左值引用不能接右值，无法使用<code>Array a = Array(Array(), true);</code></li>
-</ol>
-<p>最终，使用右值引用</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Array a;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">// 左值a，用std::move转化为右值</span></span><br><span class="line">    <span class="function">Array <span class="title">b</span><span class="params">(std::move(a))</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="std-move在STL容器中的应用"><a href="#std-move在STL容器中的应用" class="headerlink" title="std::move在STL容器中的应用"></a>std::move在STL容器中的应用</h2><p>在STL的很多容器中，都实现了以<strong>右值引用为参数</strong>的<strong>移动构造函数</strong>和<strong>移动赋值重载函数</strong>，或者其他函数</p>
-<p>最常见的如std::vector的<code>push_back</code>和<code>emplace_back</code>。参数为左值引用意味着拷贝，为右值引用意味着移动。</p>
-<p>有些STL类只有移动构造函数，比如<code>unique_ptr</code>，因此只能移动(转移内部对象所有权，或者叫浅拷贝)，不能深拷贝</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shadow-lr/p/Introduce_Std-move.html">https://www.cnblogs.com/shadow-lr/p/Introduce_Std-move.html</a></p>
 
       
     </div>
@@ -438,7 +426,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/STL/" rel="tag"># STL</a>
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
           
         </div>
       
@@ -451,15 +439,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2024/03/04/Effective%20Modern%20C++%20Item%205/" rel="next" title="Effective Modern C++ Item 5">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 5
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2023/09/23/emplace-back/" rel="prev" title="emplace_back Vs push_back">
-                emplace_back Vs push_back <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -591,7 +579,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">前置知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-move%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">std::move函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-std-move"><span class="nav-number">3.</span> <span class="nav-text">Why std::move</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-move%E5%9C%A8STL%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">std::move在STL容器中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types"><span class="nav-number">1.</span> <span class="nav-text">Use the explicitly typed initializer idiom when auto deduces undesired types</span></a></li></ol></div>
             
 
           </div>

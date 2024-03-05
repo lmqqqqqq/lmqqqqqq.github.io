@@ -519,7 +519,7 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
   <entry>
     <title>Effective Modern C++ Item 5</title>
     <url>/2024/03/04/Effective%20Modern%20C++%20Item%205/</url>
-    <content><![CDATA[<p>从 <strong>C++11</strong> 开始，<code>auto</code>变量从初始化表达式中推导出类型，这意味着我们必须显式地初始化一个变量。</p>
+    <content><![CDATA[<h1 id="Prefer-auto-to-explicit-type-declarations"><a href="#Prefer-auto-to-explicit-type-declarations" class="headerlink" title="Prefer auto to explicit type declarations"></a><strong>Prefer <code>auto</code> to explicit type declarations</strong></h1><p>从 <strong>C++11</strong> 开始，<code>auto</code>变量从初始化表达式中推导出类型，这意味着我们必须显式地初始化一个变量。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> x1;                         <span class="comment">//潜在的未初始化的变量</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">auto</span> x2;                        <span class="comment">//错误！必须要初始化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;                    <span class="comment">//没问题，x已经定义了</span></span><br></pre></td></tr></table></figure>
 <p>而且省去了很多打代码的麻烦。考虑以下两段执行相同操作的代码:</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//对从b到e的所有元素使用</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b, It e)</span>           <span class="comment">//dwim（“do what I mean”）算法</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">typename</span> std::iterator_traits&lt;It&gt;::value_type currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//如之前一样</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b,It e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">auto</span> currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -541,6 +541,36 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
 <ul>
 <li><strong>auto</strong> 声明变量必须初始化, 通常它可以避免一些移植性和效率性的问题, 并可以简化重构, 且比明确指定类型的变量声明打更少的代码。</li>
 <li><strong>auto</strong>声明变量会受到Item2和Item2中描述的陷阱的影响。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Effective Modern C++ Item 6</title>
+    <url>/2024/03/05/Effective%20Modern%20C++%20Item%206/</url>
+    <content><![CDATA[<h1 id="Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types"><a href="#Use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesired-types" class="headerlink" title="Use the explicitly typed initializer idiom when auto deduces undesired types"></a><strong>Use the explicitly typed initializer idiom when <code>auto</code> deduces undesired types</strong></h1><p>尽管 <strong>auto</strong> 相对于显式声明类型好处很多, 但还是有一些棘手的陷阱需要注意。</p>
+<p>假如我有一个函数，参数为<code>Widget</code>，返回一个<code>std::vector&lt;bool&gt;</code>，这里的<code>bool</code>表示<code>Widget</code>是否提供一个独有的特性。我们可以写这样的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::vector&lt;<span class="type">bool</span>&gt; <span class="title">features</span><span class="params">(<span class="type">const</span> Widget&amp; w)</span></span>;</span><br><span class="line">Widget w;</span><br><span class="line"><span class="type">bool</span> highPriority = <span class="built_in">features</span>(w)[<span class="number">5</span>];     <span class="comment">//w高优先级吗？</span></span><br><span class="line"><span class="built_in">processWidget</span>(w, highPriority);         <span class="comment">//根据它的优先级处理w</span></span><br></pre></td></tr></table></figure>
+<p>以上代码没有问题。但是使用<code>auto</code>代替<code>highPriority</code>的显式指定类型，就会出错：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> highPriority = <span class="built_in">features</span>(w)[<span class="number">5</span>];     <span class="comment">//w高优先级吗？</span></span><br><span class="line"><span class="built_in">processWidget</span>(w,highPriority);          <span class="comment">//未定义行为！</span></span><br></pre></td></tr></table></figure>
+<p>为什么是一个未定义行为呢？<code>std::vector&lt;bool&gt;</code>以紧凑的形式存储它的<code>bool</code>，每个<code>bool</code>占一个bit。<code>std::vector&lt;T&gt;</code>的<code>operator[]</code>理应返回一个<code>T&amp;</code>，但是C++禁止对<code>bit</code>s的引用。因此，有一个返回的代理对象(<strong>proxy</strong>)来模仿 <strong>bool</strong> 的行为。<strong>std::vector</strong>中<strong>operator[]</strong>的返回类型其实是<strong>std::vector::reference</strong>。</p>
+<p>在第一个版本中，<code>features</code>返回的<code>std::vector&lt;bool&gt;::reference</code>对象被隐式转换赋值给<code>bool</code>变量<code>highPriority</code>。</p>
+<p>而在第二个版本中，<code>auto</code>推导<code>highPriority</code>的类型为<code>std::vector&lt;bool&gt;::reference</code>，包含一个指向这些<em>bit</em>s的指针。<code>highPriority</code>是这个<code>std::vector&lt;bool&gt;::reference</code>的拷贝，所以也包含一个指针。在这个语句结束的时候<code>std::vector&lt;bool&gt;::reference</code>将会被销毁，因此作为临时变量的<code>highPriority</code>包含一个悬置的指针，会造成未定义行为。</p>
+<p>事实上, “代理(<strong>Proxy</strong>)”的设计模式是软件设计模式中历史最悠久的成员之一。一些代理类被设计于用以对客户可见。比如<code>std::shared_ptr</code>和<code>std::unique_ptr</code>。其他的代理类则或多或少不可见，比如<code>std::vector&lt;bool&gt;::reference</code>。</p>
+<p>不可见代理类里一些C++库用了表达式模板的黑科技，能够提高数值运算的效率。举个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Matrix sum = m1 + m2 + m3 + m4;</span><br></pre></td></tr></table></figure>
+<p>对两个<code>Matrix</code>对象使用<code>operator+</code>将会返回如<code>Sum&lt;Matrix, Matrix&gt;</code>这样的代理类而不是直接返回一个<code>Matrix</code>对象。上述表达式的结果可能是 <code>Sum&lt;Sum&lt;Sum&lt;Matrix, Matrix&gt;, Matrix&gt;, Matrix&gt;</code>, 如果需要具体求值时再一次性将其转换为 <strong>Matrix</strong> 对象，节省了计算次数。</p>
+<p><strong>不可见的代理类通常不适用于<code>auto</code></strong>，这样类型的对象的生命期通常不能活过一条语句。 更好的解决方案是使用显式类型初始器惯用法：使用<code>auto</code>声明一个变量，然后对表达式强制类型转换（<em>cast</em>）得出期望的推导结果。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> highPriority = <span class="built_in">static_cast</span>&lt;<span class="type">bool</span>&gt;(<span class="built_in">features</span>(w)[<span class="number">5</span>]);</span><br><span class="line"><span class="keyword">auto</span> sum = <span class="built_in">static_cast</span>&lt;Matrix&gt;(m1 + m2 + m3 + m4);</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">calcEpsilon</span><span class="params">()</span></span>;                           </span><br><span class="line"><span class="keyword">auto</span> ep = <span class="built_in">static_cast</span>&lt;<span class="type">float</span>&gt;(<span class="built_in">calcEpsilon</span>());</span><br></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li>不可见的代理类(<strong>proxy</strong>)可能会导致 <strong>auto</strong> 从表达式推断出“错误”的类型。</li>
+<li>显式类型初始器惯用法强制<code>auto</code>推导出你想要的结果。</li>
 </ul>
 ]]></content>
       <categories>

@@ -87,7 +87,7 @@
 <meta property="og:description" content="记录了我对Item5 Prefer auto to explicit type declarations的学习笔记">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-03-04T15:48:17.000Z">
-<meta property="article:modified_time" content="2024-03-04T16:55:00.723Z">
+<meta property="article:modified_time" content="2024-03-05T15:02:16.746Z">
 <meta property="article:author" content="Eric Lu">
 <meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
@@ -390,7 +390,7 @@
       
 
       
-        <p>从 <strong>C++11</strong> 开始，<code>auto</code>变量从初始化表达式中推导出类型，这意味着我们必须显式地初始化一个变量。</p>
+        <h1 id="Prefer-auto-to-explicit-type-declarations"><a href="#Prefer-auto-to-explicit-type-declarations" class="headerlink" title="Prefer auto to explicit type declarations"></a><strong>Prefer <code>auto</code> to explicit type declarations</strong></h1><p>从 <strong>C++11</strong> 开始，<code>auto</code>变量从初始化表达式中推导出类型，这意味着我们必须显式地初始化一个变量。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x1;                         <span class="comment">//潜在的未初始化的变量</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">auto</span> x2;                        <span class="comment">//错误！必须要初始化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;                    <span class="comment">//没问题，x已经定义了</span></span><br></pre></td></tr></table></figure>
 <p>而且省去了很多打代码的麻烦。考虑以下两段执行相同操作的代码:</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//对从b到e的所有元素使用</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b, It e)</span>           <span class="comment">//dwim（“do what I mean”）算法</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">typename</span> std::iterator_traits&lt;It&gt;::value_type currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//如之前一样</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b,It e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">auto</span> currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -453,6 +453,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2024/03/05/Effective%20Modern%20C++%20Item%206/" rel="prev" title="Effective Modern C++ Item 6">
+                Effective Modern C++ Item 6 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -503,8 +507,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -519,7 +532,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -564,6 +577,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Prefer-auto-to-explicit-type-declarations"><span class="nav-number">1.</span> <span class="nav-text">Prefer auto to explicit type declarations</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

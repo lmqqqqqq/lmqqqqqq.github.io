@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,14 +79,17 @@
 
 
 
-<meta name="description" content="hello">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Eric Lu">
-<meta property="og:url" content="http://example.com/tags/STL/index.html">
+<meta name="description" content="记录了我对Item14 Declare functions noexcept if they won’t emit exceptions的学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Modern C++ Item 14">
+<meta property="og:url" content="http://example.com/2024/03/15/Effective%20Modern%20C++%20Item%2014/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="hello">
+<meta property="og:description" content="记录了我对Item14 Declare functions noexcept if they won’t emit exceptions的学习笔记">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-15T07:38:28.000Z">
+<meta property="article:modified_time" content="2024-03-18T15:08:22.882Z">
 <meta property="article:author" content="Eric Lu">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
 
 
@@ -117,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/tags/STL/"/>
+  <link rel="canonical" href="http://example.com/2024/03/15/Effective Modern C++ Item 14/"/>
 
 
 
 
 
-  <title>Tag: STL | Eric Lu</title>
+  <title>Effective Modern C++ Item 14 | Eric Lu</title>
   
 
 
@@ -142,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -280,82 +283,198 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>STL<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/15/Effective%20Modern%20C++%20Item%2014/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Lu">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2023/09/23/emplace-back/" itemprop="url">
-              
-                <span itemprop="name">emplace_back Vs push_back</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 14</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-09-23T22:30:57+08:00"
-              content="2023-09-23" >
-          09-23
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-15T15:38:28+08:00">
+                2024-03-15
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  记录了我对Item14 Declare functions noexcept if they won’t emit exceptions的学习笔记
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2023/09/15/std-move/" itemprop="url">
-              
-                <span itemprop="name">std::move</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-09-15T21:18:41+08:00"
-              content="2023-09-15" >
-          09-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <h1 id="Declare-functions-noexcept-if-they-won’t-emit-exceptions"><a href="#Declare-functions-noexcept-if-they-won’t-emit-exceptions" class="headerlink" title="Declare functions noexcept if they won’t emit exceptions"></a><strong>Declare functions <code>noexcept</code> if they won’t emit exceptions</strong></h1><p>在C++98中，必须写出函数可能抛出的异常类型，如果函数实现有所改变，异常说明也可能需要修改。</p>
+<p>从C++11开始，根据函数是否可能抛出异常或从不抛出异常的<strong>二分法</strong>来区分。<code>noexcept</code>保证函数不会抛出任何异常，同时允许编译器生成更好的目标代码。</p>
+<p><code>noexcept</code>允许编译器生成更好的目标代码。考虑一个不会抛出异常的函数<code>f</code>，两种表达方式如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> x)</span> <span class="title">throw</span><span class="params">()</span></span>;   <span class="comment">//C++98风格，没有来自f的异常</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> x)</span> <span class="keyword">noexcept</span></span>;  <span class="comment">//C++11风格，没有来自f的异常</span></span><br></pre></td></tr></table></figure>
+<p>在<strong>C++98</strong>的异常说明中，调用栈会展开至<code>f</code>的调用者，随后程序被终止。在<strong>C++11</strong>异常说明中的，调用栈只有在程序执行终止之前才可能展开。因此，在一个<code>noexcept</code>函数中，优化器不需要保证运行时栈处于可展开状态；也不需要保证<code>noexcept</code>函数中的对象按照构造的反序析构。所以：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">RetType <span class="title">function</span><span class="params">(params)</span> <span class="keyword">noexcept</span></span>;  <span class="comment">//极尽所能优化</span></span><br><span class="line"><span class="function">RetType <span class="title">function</span><span class="params">(params)</span> <span class="title">throw</span><span class="params">()</span></span>;   <span class="comment">//较少优化</span></span><br><span class="line"><span class="function">RetType <span class="title">function</span><span class="params">(params)</span></span>;           <span class="comment">//较少优化</span></span><br></pre></td></tr></table></figure>
+<p>其次, 对于某些功能, <strong>noexcept</strong>优化的机会更大。假如有一个<code>std::vector&lt;Widget&gt;</code>。<code>Widget</code>通过<code>push_back</code>一次又一次的添加进<code>std::vector</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;Widget&gt; vw;</span><br><span class="line">…</span><br><span class="line">Widget w;</span><br><span class="line">…                   <span class="comment">//用w做点事</span></span><br><span class="line">vw.<span class="built_in">push_back</span>(w);    <span class="comment">//把w添加进vw</span></span><br></pre></td></tr></table></figure>
+<p>当<code>std::vector</code>的大小（size）等于它的容量（capacity），他会分配一个新的更大块的内存，并将元素从老内存区移动到新内存区，然后析构老内存区里的对象， 这就是 <code>std::vector</code>实现动态扩展的方式。这种方法使得<code>push_back</code>可以提供很强的异常安全保证：如果在复制元素期间抛出异常，<code>std::vector</code>状态保持不变。</p>
+<p>在C++11中，移动语义的引入使得上述复制操作能够优化为移动操作，但这会破坏<code>push_back</code>的异常安全保证：异常在移动第n+1个元素时抛出，<code>push_back</code>操作没有完成。但是原始的<code>std::vector</code>已经被修改。</p>
+<p>因此，<code>std::vector::push_back</code>通过检查移动操作是否被声明为<code>noexcept</code>。采用“如果可以就移动，如果必要则复制”策略。</p>
+<p><code>swap</code>函数是<code>noexcept</code>的另一个绝佳用地。标准库的<code>swap</code>是否<code>noexcept</code>有时依赖于用户定义的<code>swap</code>是否<code>noexcept</code>。比如，数组和<code>std::pair</code>的<code>swap</code>声明如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>, <span class="type">size_t</span> N&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(T (&amp;a)[N],</span></span></span><br><span class="line"><span class="params"><span class="function">          T (&amp;b)[N])</span> <span class="title">noexcept</span><span class="params">(<span class="keyword">noexcept</span>(swap(*a, *b)))</span></span>;  <span class="comment">//见下文</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T1</span>, <span class="keyword">class</span> <span class="title class_">T2</span>&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">pair</span> &#123;</span><br><span class="line">    …</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(pair&amp; p)</span> <span class="title">noexcept</span><span class="params">(<span class="keyword">noexcept</span>(swap(first, p.first)) &amp;&amp;</span></span></span><br><span class="line"><span class="params"><span class="function">                                <span class="keyword">noexcept</span>(swap(second, p.second)))</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>高层次数据结构是否<code>noexcept</code>取决于它的构成部分的那些低层次数据结构是否<code>noexcept</code>。</p>
+<p>大多数函数都是异常中立的，即缺少<code>noexcept</code>。这些函数自己不抛异常，但是它们内部的调用可能抛出。也就是说在当前这个函数内不处理异常，但是又不立即终止程序，而是让调用这个函数的函数处理异常。</p>
+<p>默认情况下，内存释放函数和析构函数——不管是用户定义的还是编译器生成的——都是隐式<code>noexcept</code>。</p>
+<p>一些库接口设计者会区分有宽泛契约（<strong>wild contracts</strong>）和严格契约（<strong>narrow contracts</strong>）的函数。有宽泛契约的函数没有前置条件。这种函数不管程序状态如何都能调用，它对调用者传来的实参不设约束。反之，没有宽泛契约的函数就有严格契约。对于这些函数，如果违反前置条件，结果将会是未定义的。</p>
+<p>假如有一个形参为<code>std::string</code>的函数<code>f</code>，并且假定这个函数<code>f</code>决不引发异常。那么<code>f</code>应该被声明为<code>noexcept</code>。但是这个函数有一个前提条件: 传入的字符串长度不能超过<strong>32</strong>个字符。因此在窄契约中, <strong>noexcept</strong> 只是有条件的 <strong>noexcept</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">const</span> std::string&amp; s)</span> <span class="keyword">noexcept</span></span>;  <span class="comment">//前置条件：</span></span><br><span class="line">                                        <span class="comment">//s.length() &lt;= 32 </span></span><br></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li><strong>noexcept</strong>标记符是函数接口的一部分。</li>
+<li><strong>noexcept</strong> 函数比<strong>non-noexcept</strong> 函数更容易优化。</li>
+<li><strong>noexcept</strong> 对于移动语义, swap, 内存释放函数和析构函数特别有用。</li>
+<li>大多数函数都是异常中立(可能抛也可能不抛异常)的, 而不是 <strong>noexcept</strong>。</li>
+</ul>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/03/05/Effective%20Modern%20C++%20Item%206/" rel="next" title="Effective Modern C++ Item 6">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 6
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -363,6 +482,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -383,8 +506,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -444,6 +576,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Declare-functions-noexcept-if-they-won%E2%80%99t-emit-exceptions"><span class="nav-number">1.</span> <span class="nav-text">Declare functions noexcept if they won’t emit exceptions</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -577,6 +725,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

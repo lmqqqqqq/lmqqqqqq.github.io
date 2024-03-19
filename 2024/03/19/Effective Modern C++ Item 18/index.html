@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="记录了我对Item5 Prefer auto to explicit type declarations的学习笔记">
+<meta name="description" content="记录了我对Item18 Use std::unique_ptr for exclusive-ownership resource management的学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Effective Modern C++ Item 5">
-<meta property="og:url" content="http://example.com/2024/03/04/Effective%20Modern%20C++%20Item%205/index.html">
+<meta property="og:title" content="Effective Modern C++ Item 18">
+<meta property="og:url" content="http://example.com/2024/03/19/Effective%20Modern%20C++%20Item%2018/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="记录了我对Item5 Prefer auto to explicit type declarations的学习笔记">
+<meta property="og:description" content="记录了我对Item18 Use std::unique_ptr for exclusive-ownership resource management的学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-04T15:48:17.000Z">
-<meta property="article:modified_time" content="2024-03-05T15:02:16.746Z">
+<meta property="article:published_time" content="2024-03-19T13:12:56.000Z">
+<meta property="article:modified_time" content="2024-03-19T14:36:25.020Z">
 <meta property="article:author" content="Eric Lu">
 <meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2024/03/04/Effective Modern C++ Item 5/"/>
+  <link rel="canonical" href="http://example.com/2024/03/19/Effective Modern C++ Item 18/"/>
 
 
 
 
 
-  <title>Effective Modern C++ Item 5 | Eric Lu</title>
+  <title>Effective Modern C++ Item 18 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/04/Effective%20Modern%20C++%20Item%205/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/19/Effective%20Modern%20C++%20Item%2018/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 5</h1>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 18</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-04T23:48:17+08:00">
-                2024-03-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-19T21:12:56+08:00">
+                2024-03-19
               </time>
             
 
@@ -373,7 +373,7 @@
 
           
               <div class="post-description">
-                  记录了我对Item5 Prefer auto to explicit type declarations的学习笔记
+                  记录了我对Item18 Use std::unique_ptr for exclusive-ownership resource management的学习笔记
               </div>
           
 
@@ -390,28 +390,33 @@
       
 
       
-        <h1 id="Prefer-auto-to-explicit-type-declarations"><a href="#Prefer-auto-to-explicit-type-declarations" class="headerlink" title="Prefer auto to explicit type declarations"></a><strong>Prefer <code>auto</code> to explicit type declarations</strong></h1><p>从 <strong>C++11</strong> 开始，<code>auto</code>变量从初始化表达式中推导出类型，这意味着我们必须显式地初始化一个变量。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x1;                         <span class="comment">//潜在的未初始化的变量</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">auto</span> x2;                        <span class="comment">//错误！必须要初始化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;                    <span class="comment">//没问题，x已经定义了</span></span><br></pre></td></tr></table></figure>
-<p>而且省去了很多打代码的麻烦。考虑以下两段执行相同操作的代码:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//对从b到e的所有元素使用</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b, It e)</span>           <span class="comment">//dwim（“do what I mean”）算法</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">typename</span> std::iterator_traits&lt;It&gt;::value_type currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//如之前一样</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b,It e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">auto</span> currValue = *b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用Item2所述的<code>auto</code>类型推导技术，它甚至能表示一些只有编译器才知道的类型：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++11</span></span><br><span class="line"><span class="keyword">auto</span> derefUPLess = </span><br><span class="line">    [](<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p1,       <span class="comment">//用于std::unique_ptr</span></span><br><span class="line">       <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p2)       <span class="comment">//指向的Widget类型的</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;                      <span class="comment">//比较函数</span></span><br><span class="line"><span class="comment">// C++14</span></span><br><span class="line"><span class="keyword">auto</span> derefLess =                                </span><br><span class="line">    [](<span class="type">const</span> <span class="keyword">auto</span>&amp; p1,                          <span class="comment">//被任何像指针一样的东西</span></span><br><span class="line">       <span class="type">const</span> <span class="keyword">auto</span>&amp; p2)                          <span class="comment">//指向的值的比较函数</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;</span><br></pre></td></tr></table></figure>
-<p>但是，有人觉得不需要使用<code>auto</code>声明局部变量来保存一个闭包，可以使用<code>std::function</code>对象。</p>
-<p><code>std::function</code>是一个C++11标准模板库中的一个模板，它泛化了函数指针的概念。<code>std::function</code>可以指向任何可调用对象。但创建<code>std::function</code>对象非常麻烦，而且还可能需要更多内存来存储闭包（堆上）。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::function&lt;<span class="type">bool</span>(<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;,</span><br><span class="line">                   <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;)&gt;</span><br><span class="line">derefUPLess = [](<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p1,</span><br><span class="line">                 <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p2)</span><br><span class="line">                &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;</span><br></pre></td></tr></table></figure>
-<p>使用<code>auto</code>除了可以避免未初始化的无效变量，省略冗长的声明类型，直接保存闭包外，还有一个好处是可以避免类型快捷方式有关的问题。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; v;</span><br><span class="line"><span class="type">unsigned</span> sz = v.<span class="built_in">size</span>();</span><br></pre></td></tr></table></figure>
-<p><code>v.size()</code>的标准返回类型是<code>std::vector&lt;int&gt;::size_type</code>。在<strong>Windows 32-bit</strong> <code>std::vector&lt;int&gt;::size_type</code>和<code>unsigned</code>是一样的大小，但是在<strong>Windows 64-bit</strong>上<code>std::vector&lt;int&gt;::size_type</code>是64位，<code>unsigned</code>是32位，这就会出问题。</p>
-<p>还有一个例子，考虑以下代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::unordered_map&lt;std::string, <span class="type">int</span>&gt; m;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">const</span> std::pair&lt;std::string, <span class="type">int</span>&gt;&amp; p : m)</span><br><span class="line">&#123;</span><br><span class="line">    …                                   <span class="comment">//用p做一些事</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>std::unordered_map</code>的<em>key</em>是<code>const</code>的，所以<code>std::pair</code>的类型是<code>std::pair&lt;const std::string, int&gt;</code>。由于类型不一致，编译器会通过拷贝<code>m</code>中的对象创建一个临时对象，然后把<code>p</code>的引用绑定到这个临时对象上。在每个循环迭代结束时，临时对象将会销毁。</p>
-<p>使用<code>auto</code>可以避免这些很难被意识到的类型不匹配的错误：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">const</span> <span class="keyword">auto</span>&amp; p : m)</span><br><span class="line">&#123;</span><br><span class="line">    …                                   <span class="comment">//如之前一样</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样不仅代码更简洁，而且确保与<strong>std::unordered_map</strong>中真实<strong>pair</strong>的引用“绑定”, 而并不只是一个临时拷贝的引用。</p>
+        <h1 id="Item-18-Use-std-unique-ptr-for-exclusive-ownership-resource-management"><a href="#Item-18-Use-std-unique-ptr-for-exclusive-ownership-resource-management" class="headerlink" title="Item 18: Use std::unique_ptr for exclusive-ownership resource management"></a><strong>Item 18: Use <code>std::unique_ptr</code> for exclusive-ownership resource management</strong></h1><p><strong>std::unique_ptr</strong> 提供对象的独占所有权。不能复制 <strong>std::unique_ptr</strong>，只允许移动,，它将所有权从源指针转移到目标指针。</p>
+<p><code>std::unique_ptr</code>的常见用法是作为工厂函数返回类型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Investment</span> &#123; … &#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stock</span>: <span class="keyword">public</span> Investment &#123; … &#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bond</span>: <span class="keyword">public</span> Investment &#123; … &#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RealEstate</span>: <span class="keyword">public</span> Investment &#123; … &#125;;</span><br></pre></td></tr></table></figure>
+<p><code>Investment</code>继承关系的工厂函数可以这样声明：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;            <span class="comment">//返回指向对象的std::unique_ptr，</span></span><br><span class="line">std::unique_ptr&lt;Investment&gt;         <span class="comment">//对象使用给定实参创建</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... params);</span><br></pre></td></tr></table></figure>
+<p>默认情况下，当 <strong>std::unique_ptr</strong> 超出生命周期范围时，销毁将通过<code>delete</code>进行，但是在构造过程中，<code>std::unique_ptr</code>对象可以被设置为使用<strong>自定义删除器</strong>。</p>
+<p>假设想要在 <strong>Investment</strong> 对象被销毁之前打印日志，可以按如下方式实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> delInvmt = [](Investment* pInvestment)         <span class="comment">//自定义删除器</span></span><br><span class="line">                &#123;                                   <span class="comment">//（lambda表达式）</span></span><br><span class="line">                    <span class="built_in">makeLogEntry</span>(pInvestment);</span><br><span class="line">                    <span class="keyword">delete</span> pInvestment; </span><br><span class="line">                &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;</span><br><span class="line">std::unique_ptr&lt;Investment, <span class="keyword">decltype</span>(delInvmt)&gt;     <span class="comment">//更改后的返回类型</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... params)</span><br><span class="line">&#123;</span><br><span class="line">    std::unique_ptr&lt;Investment, <span class="keyword">decltype</span>(delInvmt)&gt; <span class="comment">//应返回的指针</span></span><br><span class="line">        <span class="built_in">pInv</span>(<span class="literal">nullptr</span>, delInvmt);</span><br><span class="line">    <span class="keyword">if</span> (<span class="comment">/*一个Stock对象应被创建*/</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        pInv.<span class="built_in">reset</span>(<span class="keyword">new</span> <span class="built_in">Stock</span>(std::forward&lt;Ts&gt;(params)...));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="comment">/*一个Bond对象应被创建*/</span> )   </span><br><span class="line">    &#123;     </span><br><span class="line">        ...</span><br><span class="line">    &#125;   </span><br><span class="line">    ... </span><br><span class="line">    <span class="keyword">return</span> pInv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这个例子可以看出：</p>
+<ul>
+<li>所有的自定义的删除行为接受要销毁对象的原始指针，然后执行销毁操作。</li>
+<li>使用自定义删除器时，删除器类型必须作为第二个类型实参传给<code>std::unique_ptr</code>。</li>
+<li>为了将自定义删除器与智能指针关联，需要把自定义删除器作为构造函数的第二个实参。</li>
+<li>不能将原始指针（比如<code>new</code>创建）赋值给<code>std::unique_ptr</code>，从原始指针到智能指针的隐式转换会出问题。</li>
+<li>自定义删除器的一个形参，类型是基类类型，不管创建的对象的真实类型是基类还是子类，为此基类必须有虚析构函数。</li>
+</ul>
+<p>使用默认删除器时（如<code>delete</code>），<code>std::unique_ptr</code>对象和原始指针大小相同。当使用自定义删除器时，可能会增加<strong>std::unique_ptr</strong> 的大小。函数指针形式的删除器，会使<code>std::unique_ptr</code>的大小增加一个字。对于函数对象形式的删除器来说，变化的大小取决于函数对象中存储的状态多少，无状态函数对象（比如不捕获变量的<em>lambda</em>表达式）对大小没有影响，因此尽量使用<em>lambda</em>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> delInvmt1 = [](Investment* pInvestment)        <span class="comment">//无状态lambda的</span></span><br><span class="line">                 &#123;                                  <span class="comment">//自定义删除器</span></span><br><span class="line">                     <span class="built_in">makeLogEntry</span>(pInvestment);</span><br><span class="line">                     <span class="keyword">delete</span> pInvestment; </span><br><span class="line">                 &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;                            <span class="comment">//返回类型大小是</span></span><br><span class="line">std::unique_ptr&lt;Investment, <span class="keyword">decltype</span>(delInvmt1)&gt;    <span class="comment">//Investment*的大小</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... args);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">delInvmt2</span><span class="params">(Investment* pInvestment)</span>             <span class="comment">//函数形式的</span></span></span><br><span class="line"><span class="function"></span>&#123;                                                   <span class="comment">//自定义删除器</span></span><br><span class="line">    <span class="built_in">makeLogEntry</span>(pInvestment);</span><br><span class="line">    <span class="keyword">delete</span> pInvestment;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;                            <span class="comment">//返回类型大小是</span></span><br><span class="line">std::unique_ptr&lt;Investment, <span class="built_in">void</span> (*)(Investment*)&gt;  <span class="comment">//Investment*的指针</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... params);                     <span class="comment">//加至少一个函数指针的大小</span></span><br></pre></td></tr></table></figure>
+<p><code>std::unique_ptr</code>有两种形式，一种用于单个对象（<code>std::unique_ptr&lt;T&gt;</code>），一种用于数组（<code>std::unique_ptr&lt;T[]&gt;</code>）。</p>
+<p><code>std::unique_ptr</code>还可以轻松高效的转换为<code>std::shared_ptr</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::shared_ptr&lt;Investment&gt; sp =            <span class="comment">//将std::unique_ptr</span></span><br><span class="line">    <span class="built_in">makeInvestment</span>(arguments);              <span class="comment">//转为std::shared_ptr</span></span><br></pre></td></tr></table></figure>
 <p><strong>重点</strong></p>
 <ul>
-<li><strong>auto</strong> 声明变量必须初始化, 通常它可以避免一些移植性和效率性的问题, 并可以简化重构, 且比明确指定类型的变量声明打更少的代码。</li>
-<li><strong>auto</strong>声明变量会受到Item2和Item2中描述的陷阱的影响。</li>
+<li><strong>std::unique_ptr</strong> 是一个轻量、快速、只能移动(<strong>move-only</strong>)的智能指针，用于管理具有独占所有权的资源。</li>
+<li>默认情况下, 资源销毁通过<strong>delete</strong>实现，但可以指定自定义删除器。</li>
+<li>有状态的自定义删除器和函数指针作为删除器会增加 <strong>std::unique_ptr</strong> 对象的大小。</li>
+<li>将 <strong>std::unique_ptr</strong> 转换为 <strong>std::shared_ptr</strong> 很容易方便。</li>
 </ul>
 
       
@@ -443,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2024/03/04/435%E6%97%A0%E9%87%8D%E5%8F%A0%E5%8C%BA%E9%97%B4/" rel="next" title="435无重叠区间">
-                <i class="fa fa-chevron-left"></i> 435无重叠区间
+              <a href="/2024/03/15/Effective%20Modern%20C++%20Item%2014/" rel="next" title="Effective Modern C++ Item 14">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 14
               </a>
             
           </div>
@@ -452,10 +457,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2024/03/05/Effective%20Modern%20C++%20Item%206/" rel="prev" title="Effective Modern C++ Item 6">
-                Effective Modern C++ Item 6 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -587,7 +588,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Prefer-auto-to-explicit-type-declarations"><span class="nav-number">1.</span> <span class="nav-text">Prefer auto to explicit type declarations</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Item-18-Use-std-unique-ptr-for-exclusive-ownership-resource-management"><span class="nav-number">1.</span> <span class="nav-text">Item 18: Use std::unique_ptr for exclusive-ownership resource management</span></a></li></ol></div>
             
 
           </div>

@@ -617,4 +617,43 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
         <tag>Effective Modern C++</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Effective Modern C++ Item 18</title>
+    <url>/2024/03/19/Effective%20Modern%20C++%20Item%2018/</url>
+    <content><![CDATA[<h1 id="Item-18-Use-std-unique-ptr-for-exclusive-ownership-resource-management"><a href="#Item-18-Use-std-unique-ptr-for-exclusive-ownership-resource-management" class="headerlink" title="Item 18: Use std::unique_ptr for exclusive-ownership resource management"></a><strong>Item 18: Use <code>std::unique_ptr</code> for exclusive-ownership resource management</strong></h1><p><strong>std::unique_ptr</strong> 提供对象的独占所有权。不能复制 <strong>std::unique_ptr</strong>，只允许移动,，它将所有权从源指针转移到目标指针。</p>
+<p><code>std::unique_ptr</code>的常见用法是作为工厂函数返回类型。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Investment</span> &#123; … &#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stock</span>: <span class="keyword">public</span> Investment &#123; … &#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Bond</span>: <span class="keyword">public</span> Investment &#123; … &#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RealEstate</span>: <span class="keyword">public</span> Investment &#123; … &#125;;</span><br></pre></td></tr></table></figure>
+<p><code>Investment</code>继承关系的工厂函数可以这样声明：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;            <span class="comment">//返回指向对象的std::unique_ptr，</span></span><br><span class="line">std::unique_ptr&lt;Investment&gt;         <span class="comment">//对象使用给定实参创建</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... params);</span><br></pre></td></tr></table></figure>
+<p>默认情况下，当 <strong>std::unique_ptr</strong> 超出生命周期范围时，销毁将通过<code>delete</code>进行，但是在构造过程中，<code>std::unique_ptr</code>对象可以被设置为使用<strong>自定义删除器</strong>。</p>
+<p>假设想要在 <strong>Investment</strong> 对象被销毁之前打印日志，可以按如下方式实现：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> delInvmt = [](Investment* pInvestment)         <span class="comment">//自定义删除器</span></span><br><span class="line">                &#123;                                   <span class="comment">//（lambda表达式）</span></span><br><span class="line">                    <span class="built_in">makeLogEntry</span>(pInvestment);</span><br><span class="line">                    <span class="keyword">delete</span> pInvestment; </span><br><span class="line">                &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;</span><br><span class="line">std::unique_ptr&lt;Investment, <span class="keyword">decltype</span>(delInvmt)&gt;     <span class="comment">//更改后的返回类型</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... params)</span><br><span class="line">&#123;</span><br><span class="line">    std::unique_ptr&lt;Investment, <span class="keyword">decltype</span>(delInvmt)&gt; <span class="comment">//应返回的指针</span></span><br><span class="line">        <span class="built_in">pInv</span>(<span class="literal">nullptr</span>, delInvmt);</span><br><span class="line">    <span class="keyword">if</span> (<span class="comment">/*一个Stock对象应被创建*/</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        pInv.<span class="built_in">reset</span>(<span class="keyword">new</span> <span class="built_in">Stock</span>(std::forward&lt;Ts&gt;(params)...));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="comment">/*一个Bond对象应被创建*/</span> )   </span><br><span class="line">    &#123;     </span><br><span class="line">        ...</span><br><span class="line">    &#125;   </span><br><span class="line">    ... </span><br><span class="line">    <span class="keyword">return</span> pInv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这个例子可以看出：</p>
+<ul>
+<li>所有的自定义的删除行为接受要销毁对象的原始指针，然后执行销毁操作。</li>
+<li>使用自定义删除器时，删除器类型必须作为第二个类型实参传给<code>std::unique_ptr</code>。</li>
+<li>为了将自定义删除器与智能指针关联，需要把自定义删除器作为构造函数的第二个实参。</li>
+<li>不能将原始指针（比如<code>new</code>创建）赋值给<code>std::unique_ptr</code>，从原始指针到智能指针的隐式转换会出问题。</li>
+<li>自定义删除器的一个形参，类型是基类类型，不管创建的对象的真实类型是基类还是子类，为此基类必须有虚析构函数。</li>
+</ul>
+<p>使用默认删除器时（如<code>delete</code>），<code>std::unique_ptr</code>对象和原始指针大小相同。当使用自定义删除器时，可能会增加<strong>std::unique_ptr</strong> 的大小。函数指针形式的删除器，会使<code>std::unique_ptr</code>的大小增加一个字。对于函数对象形式的删除器来说，变化的大小取决于函数对象中存储的状态多少，无状态函数对象（比如不捕获变量的<em>lambda</em>表达式）对大小没有影响，因此尽量使用<em>lambda</em>。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> delInvmt1 = [](Investment* pInvestment)        <span class="comment">//无状态lambda的</span></span><br><span class="line">                 &#123;                                  <span class="comment">//自定义删除器</span></span><br><span class="line">                     <span class="built_in">makeLogEntry</span>(pInvestment);</span><br><span class="line">                     <span class="keyword">delete</span> pInvestment; </span><br><span class="line">                 &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;                            <span class="comment">//返回类型大小是</span></span><br><span class="line">std::unique_ptr&lt;Investment, <span class="keyword">decltype</span>(delInvmt1)&gt;    <span class="comment">//Investment*的大小</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... args);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">delInvmt2</span><span class="params">(Investment* pInvestment)</span>             <span class="comment">//函数形式的</span></span></span><br><span class="line"><span class="function"></span>&#123;                                                   <span class="comment">//自定义删除器</span></span><br><span class="line">    <span class="built_in">makeLogEntry</span>(pInvestment);</span><br><span class="line">    <span class="keyword">delete</span> pInvestment;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Ts&gt;                            <span class="comment">//返回类型大小是</span></span><br><span class="line">std::unique_ptr&lt;Investment, <span class="built_in">void</span> (*)(Investment*)&gt;  <span class="comment">//Investment*的指针</span></span><br><span class="line"><span class="built_in">makeInvestment</span>(Ts&amp;&amp;... params);                     <span class="comment">//加至少一个函数指针的大小</span></span><br></pre></td></tr></table></figure>
+<p><code>std::unique_ptr</code>有两种形式，一种用于单个对象（<code>std::unique_ptr&lt;T&gt;</code>），一种用于数组（<code>std::unique_ptr&lt;T[]&gt;</code>）。</p>
+<p><code>std::unique_ptr</code>还可以轻松高效的转换为<code>std::shared_ptr</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::shared_ptr&lt;Investment&gt; sp =            <span class="comment">//将std::unique_ptr</span></span><br><span class="line">    <span class="built_in">makeInvestment</span>(arguments);              <span class="comment">//转为std::shared_ptr</span></span><br></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li><strong>std::unique_ptr</strong> 是一个轻量、快速、只能移动(<strong>move-only</strong>)的智能指针，用于管理具有独占所有权的资源。</li>
+<li>默认情况下, 资源销毁通过<strong>delete</strong>实现，但可以指定自定义删除器。</li>
+<li>有状态的自定义删除器和函数指针作为删除器会增加 <strong>std::unique_ptr</strong> 对象的大小。</li>
+<li>将 <strong>std::unique_ptr</strong> 转换为 <strong>std::shared_ptr</strong> 很容易方便。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
 </search>

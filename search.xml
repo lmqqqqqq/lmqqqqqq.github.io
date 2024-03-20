@@ -708,4 +708,40 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
         <tag>Effective Modern C++</tag>
       </tags>
   </entry>
+  <entry>
+    <title>42接雨水</title>
+    <url>/2024/03/21/42%E6%8E%A5%E9%9B%A8%E6%B0%B4/</url>
+    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定 <code>n</code> 个非负整数表示每个宽度为 <code>1</code> 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/rainwatertrap.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]</span><br><span class="line">输出：6</span><br><span class="line">解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 </span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：height = [4,2,0,3,2,5]</span><br><span class="line">输出：9</span><br></pre></td></tr></table></figure>
+<h1 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h1><h2 id="方法一：动态规划"><a href="#方法一：动态规划" class="headerlink" title="方法一：动态规划"></a>方法一：动态规划</h2><p>对于下标 i，下雨后水能到达的最大高度等于下标 i 两边的最大高度的最小值，所以接的雨水为<em>min（leftamx， rightmax）- height[i]</em> 。</p>
+<p>对于每个下标两边的最大高度，可以创建两个长度为 n 的数组 leftMax 和 rightMax来记录。</p>
+<p>对于 leftMax 数组，从左向右遍历，leftMax[i] = max( leftMax[i-1], height[i] )。</p>
+<p>对于 rightMax 数组，从右向左遍历，rightMax[i] = max( rightMax[i+1], height[i] )。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">trap</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n=height.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">leftmax</span><span class="params">(n,<span class="number">0</span>)</span></span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">rightmax</span><span class="params">(n,<span class="number">0</span>)</span></span>;</span><br><span class="line">        leftmax[<span class="number">0</span>]=height[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">            leftmax[i]=<span class="built_in">max</span>(leftmax[i<span class="number">-1</span>], height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        rightmax[n<span class="number">-1</span>]=height[n<span class="number">-1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-2</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">            rightmax[i]=<span class="built_in">max</span>(rightmax[i+<span class="number">1</span>],height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> ans=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">            ans+=(<span class="built_in">min</span>(rightmax[i], leftmax[i])-height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="方法二：双指针"><a href="#方法二：双指针" class="headerlink" title="方法二：双指针"></a>方法二：双指针</h2><p>在动态规划的解法中，需要维护两个数组  leftMax 和  rightMax，因此时间复杂度是O( n )。这是否可以优化呢？</p>
+<p>下标 i 的接水量由leftMax[i] 和 rightMax[i] 决定， 一个从左往右算，一个从右往左算，因此考虑双指针。</p>
+<p>指针left从左往右移动，维护leftMax[i]的值。指针right从右往左移动，维护rightMax[i]的值。</p>
+<p>当两个指针没相遇时：</p>
+<ul>
+<li>如果leftMax[i] &lt;  rightMax[i]，那么已经可以判断出对于下标 i 是左边更低，直接就能算出下标 i 处的接水量了。</li>
+<li>如果leftMax[i] &gt;  rightMax[i]，那么已经可以判断出对于下标 i 是右边更低，后边同理。</li>
+</ul>
+<p>当两个指针相遇时，总的接水量就求出来了。</p>
+<p>优化后的空间复杂度为O (1)。</p>
+<h2 id="方法三：单调栈"><a href="#方法三：单调栈" class="headerlink" title="方法三：单调栈"></a>方法三：单调栈</h2><p>能接雨水的条件是两边高，中间低。由此想到单调栈。维护一个单调栈，单调栈存储的是下标，满足从栈底到栈顶的下标对应的数组 height中的元素递减。</p>
+<p>从左向右遍历，能接雨水的必要条件是栈中至少有两个元素，从上往下记为top 和left。</p>
+<p>如果height[i] &gt; height[top], 那么就得到了一个接水区域。宽度是 i - left -1。计算完成后top出栈，并将 i 入栈。</p>
+<p>如果height[i] &lt; height[top], 仅仅就将 i 入栈，不作任何操作。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+      </tags>
+  </entry>
 </search>

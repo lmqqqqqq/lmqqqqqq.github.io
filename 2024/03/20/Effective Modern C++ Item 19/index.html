@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,15 +79,20 @@
 
 
 
-<meta name="description" content="hello">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Eric Lu">
-<meta property="og:url" content="http://example.com/tags/STL/index.html">
+<meta name="description" content="记录了我对Item19 Use std::shared_ptr for shared-ownership resource management的学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective Modern C++ Item 19">
+<meta property="og:url" content="http://example.com/2024/03/20/Effective%20Modern%20C++%20Item%2019/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="hello">
+<meta property="og:description" content="记录了我对Item19 Use std::shared_ptr for shared-ownership resource management的学习笔记">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202403210005681.png">
+<meta property="article:published_time" content="2024-03-20T15:30:28.000Z">
+<meta property="article:modified_time" content="2024-03-20T17:08:21.535Z">
 <meta property="article:author" content="Eric Lu">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202403210005681.png">
 
 
 
@@ -117,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/tags/STL/"/>
+  <link rel="canonical" href="http://example.com/2024/03/20/Effective Modern C++ Item 19/"/>
 
 
 
 
 
-  <title>Tag: STL | Eric Lu</title>
+  <title>Effective Modern C++ Item 19 | Eric Lu</title>
   
 
 
@@ -142,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -280,82 +285,213 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>STL<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/20/Effective%20Modern%20C++%20Item%2019/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Eric Lu">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2023/09/23/emplace-back/" itemprop="url">
-              
-                <span itemprop="name">emplace_back Vs push_back</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 19</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-09-23T22:30:57+08:00"
-              content="2023-09-23" >
-          09-23
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-20T23:30:28+08:00">
+                2024-03-20
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  记录了我对Item19 Use std::shared_ptr for shared-ownership resource management的学习笔记
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2023/09/15/std-move/" itemprop="url">
-              
-                <span itemprop="name">std::move</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2023-09-15T21:18:41+08:00"
-              content="2023-09-15" >
-          09-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <h1 id="Item-19-Use-std-shared-ptr-for-shared-ownership-resource-management"><a href="#Item-19-Use-std-shared-ptr-for-shared-ownership-resource-management" class="headerlink" title="Item 19: Use std::shared_ptr for shared-ownership resource management"></a><strong>Item 19: Use <code>std::shared_ptr</code> for shared-ownership resource management</strong></h1><p><strong>std::shared_ptr</strong> 是一个支持共享所有权对象资源管理的智能指针。它通过引用计数来确保是否是最后一个指向某种资源的指针，如果引用计数值为零，即不再指向对象时，最后一个 <strong>std::shared_ptr</strong>就会在析构函数中销毁资源。</p>
+<p>引用计数有几个性能影响:</p>
+<ul>
+<li><strong><code>std::shared_ptr</code>大小是原始指针的两倍</strong>，因为它内部包含一个指向资源的原始指针，还包含一个指向资源的引用计数值的原始指针。</li>
+<li><strong>引用计数的内存必须动态分配</strong>。 </li>
+<li><strong>递增递减引用计数必须是原子性的</strong>。</li>
+</ul>
+<p><code>std::shared_ptr</code>和<code>std::unique_ptr</code>一样也支持自定义的删除器。但是，删除器类型不是<code>std::shared_ptr</code>的一部分。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> loggingDel = [](Widget *pw)        <span class="comment">//自定义删除器</span></span><br><span class="line">                  &#123;                     <span class="comment">//（和条款18一样）</span></span><br><span class="line">                      <span class="built_in">makeLogEntry</span>(pw);</span><br><span class="line">                      <span class="keyword">delete</span> pw;</span><br><span class="line">                  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">std::unique_ptr&lt;                        <span class="comment">//删除器类型是</span></span></span><br><span class="line"><span class="function">    Widget, <span class="title">decltype</span><span class="params">(loggingDel)</span>        <span class="comment">//指针类型的一部分</span></span></span><br><span class="line"><span class="function">    &gt; <span class="title">upw</span><span class="params">(<span class="keyword">new</span> Widget, loggingDel)</span></span>;</span><br><span class="line">std::shared_ptr&lt;Widget&gt;                 <span class="comment">//删除器类型不是</span></span><br><span class="line">    <span class="built_in">spw</span>(<span class="keyword">new</span> Widget, loggingDel);        <span class="comment">//指针类型的一部分</span></span><br></pre></td></tr></table></figure>
+<p>考虑有两个<code>std::shared_ptr&lt;Widget&gt;</code>，虽然带有不同的删除器，但他们是同一类型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> customDeleter1 = [](Widget *pw) &#123; … &#125;;     <span class="comment">//自定义删除器，</span></span><br><span class="line"><span class="keyword">auto</span> customDeleter2 = [](Widget *pw) &#123; … &#125;;     <span class="comment">//每种类型不同</span></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">pw1</span><span class="params">(<span class="keyword">new</span> Widget, customDeleter1)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">pw2</span><span class="params">(<span class="keyword">new</span> Widget, customDeleter2)</span></span>;</span><br><span class="line">std::vector&lt;std::shared_ptr&lt;Widget&gt;&gt; vpw&#123; pw1, pw2 &#125;;</span><br></pre></td></tr></table></figure>
+<p>此外，自定义删除器不会改变<code>std::shared_ptr</code>对象的大小。<code>std::shared_ptr</code>内部包含一个指向资源的原始指针，还包含一个指向<strong>控制块</strong>的指针。一个控制块包含引用计数、弱计数和指向自定义删除器、分配器等的额外功能指针。每个<code>std::shared_ptr</code>管理的对象都有个相应的控制块。</p>
+<p><img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202403210005681.png" alt="image-20240321000449021" style="zoom:50%;" /></p>
+<p>控制块的创建会遵循下面几条规则：</p>
+<ul>
+<li><code>std::make_shared</code>总是创建一个控制块。</li>
+<li>当从独占指针（即<code>std::unique_ptr</code>或者<code>std::auto_ptr</code>）上构造出<code>std::shared_ptr</code>时会创建控制块。</li>
+<li>当从原始指针上构造出<code>std::shared_ptr</code>时会创建控制块。</li>
+</ul>
+<p>关于第3点, 一般不建议从原始指针上构造一个<code>std::shared_ptr</code>，因为指向的对象容易有多个控制块关联，从而对象将会被销毁多次。如以下这个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> pw = <span class="keyword">new</span> Widget;                           <span class="comment">//pw是原始指针</span></span><br><span class="line">…</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw1</span><span class="params">(pw, loggingDel)</span></span>;   <span class="comment">//为*pw创建控制块</span></span><br><span class="line">…</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw2</span><span class="params">(pw, loggingDel)</span></span>;   <span class="comment">//为*pw创建第二个控制块</span></span><br></pre></td></tr></table></figure>
+<p>因此，避免传给<code>std::shared_ptr</code>构造函数原始指针，而是使用<code>std::make_shared</code>。如果使用了自定义删除器导致无法使用<code>std::make_shared</code>，直接传<code>new</code>出来的结果，而不要传指针变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw1</span><span class="params">(<span class="keyword">new</span> Widget,    <span class="comment">//直接使用new的结果</span></span></span></span><br><span class="line"><span class="params"><span class="function">                             loggingDel)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw2</span><span class="params">(spw1)</span></span>;         <span class="comment">//spw2使用spw1一样的控制块</span></span><br></pre></td></tr></table></figure>
+<p>一个比较意外的地方是使用<code>this</code>指针作为<code>std::shared_ptr</code>构造函数实参可能创建多个控制块。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;std::shared_ptr&lt;Widget&gt;&gt; processedWidgets;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    …</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">()</span></span>;</span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::process</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    …                                       <span class="comment">//处理Widget</span></span><br><span class="line">    processedWidgets.<span class="built_in">emplace_back</span>(<span class="keyword">this</span>);    <span class="comment">//然后将它加到已处理过的Widget</span></span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>向<code>std::shared_ptr</code>的容器传递一个原始指针（<code>this</code>），根据控制块的创建规则3，<code>std::shared_ptr</code>会为指向的<code>Widget</code>（<code>*this</code>）创建一个控制块。但是成员函数外面早已存在指向那个<code>Widget</code>对象的指针。</p>
+<p><code>std::shared_ptr</code>API有处理这种情况的模板类：<code>std::enable_shared_from_this&lt;T&gt;</code>和成员函数<code>shared_from_this（）</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span>: <span class="keyword">public</span> std::enable_shared_from_this&lt;Widget&gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    …</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">()</span></span>;</span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::process</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//和之前一样，处理Widget</span></span><br><span class="line">    …</span><br><span class="line">    <span class="comment">//把指向当前对象的std::shared_ptr加入processedWidgets</span></span><br><span class="line">    processedWidgets.<span class="built_in">emplace_back</span>(<span class="built_in">shared_from_this</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>std::unique_ptr</code>可以转换为<code>std::shared_ptr</code>，但是<strong>反之不行</strong>。</p>
+<p><code>std::shared_ptr</code>不支持数组的资源管理。到C++20才支持。</p>
+<p><strong>重点</strong></p>
+<ul>
+<li><p><strong>std::shared_ptr</strong> 为有共享所有权的任意资源提供一种自动垃圾回收的便捷方式。</p>
+</li>
+<li><p>与 <strong>std::unique_ptr</strong> 相比, <strong>std::shared_ptr</strong> 对象通常大两倍, 会产生控制块的开销, 需要原子性的引用计数修改操作。</p>
+</li>
+<li><p>默认资源销毁是通过<strong>delete</strong>, 但支持自定义删除器. 删除器的类型对 <strong>std::shared_ptr</strong> 的声明类型没有影响。</p>
+</li>
+<li><p>避免从原始指针变量创建 <strong>std::shared_ptr</strong>。</p>
+</li>
+</ul>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/03/19/Effective%20Modern%20C++%20Item%2018/" rel="next" title="Effective Modern C++ Item 18">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 18
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -363,6 +499,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -383,8 +523,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -444,6 +593,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Item-19-Use-std-shared-ptr-for-shared-ownership-resource-management"><span class="nav-number">1.</span> <span class="nav-text">Item 19: Use std::shared_ptr for shared-ownership resource management</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -577,6 +742,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

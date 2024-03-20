@@ -98,7 +98,7 @@
   <entry>
     <title>215数组中的第K个最大元素</title>
     <url>/2024/02/27/215%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E7%AC%ACK%E4%B8%AA%E6%9C%80%E5%A4%A7%E5%85%83%E7%B4%A0/</url>
-    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定整数数组 <code>nums</code> 和整数 <code>k</code>，请返回数组中第 <code>**k**</code> 个最大的元素。</p>
+    <content><![CDATA[<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>给定整数数组 <code>nums</code> 和整数 <code>k</code>，请返回数组中第 <code>k</code> 个最大的元素。</p>
 <p>请注意，你需要找的是数组排序后的第 <code>k</code> 个最大的元素，而不是第 <code>k</code> 个不同的元素。</p>
 <p>你必须设计并实现时间复杂度为 <code>O(n)</code> 的算法解决此问题。</p>
 <p><strong>示例 1:</strong></p>
@@ -647,6 +647,58 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
 <li>默认情况下, 资源销毁通过<strong>delete</strong>实现，但可以指定自定义删除器。</li>
 <li>有状态的自定义删除器和函数指针作为删除器会增加 <strong>std::unique_ptr</strong> 对象的大小。</li>
 <li>将 <strong>std::unique_ptr</strong> 转换为 <strong>std::shared_ptr</strong> 很容易方便。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Effective Modern C++ Item 19</title>
+    <url>/2024/03/20/Effective%20Modern%20C++%20Item%2019/</url>
+    <content><![CDATA[<h1 id="Item-19-Use-std-shared-ptr-for-shared-ownership-resource-management"><a href="#Item-19-Use-std-shared-ptr-for-shared-ownership-resource-management" class="headerlink" title="Item 19: Use std::shared_ptr for shared-ownership resource management"></a><strong>Item 19: Use <code>std::shared_ptr</code> for shared-ownership resource management</strong></h1><p><strong>std::shared_ptr</strong> 是一个支持共享所有权对象资源管理的智能指针。它通过引用计数来确保是否是最后一个指向某种资源的指针，如果引用计数值为零，即不再指向对象时，最后一个 <strong>std::shared_ptr</strong>就会在析构函数中销毁资源。</p>
+<p>引用计数有几个性能影响:</p>
+<ul>
+<li><strong><code>std::shared_ptr</code>大小是原始指针的两倍</strong>，因为它内部包含一个指向资源的原始指针，还包含一个指向资源的引用计数值的原始指针。</li>
+<li><strong>引用计数的内存必须动态分配</strong>。 </li>
+<li><strong>递增递减引用计数必须是原子性的</strong>。</li>
+</ul>
+<p><code>std::shared_ptr</code>和<code>std::unique_ptr</code>一样也支持自定义的删除器。但是，删除器类型不是<code>std::shared_ptr</code>的一部分。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> loggingDel = [](Widget *pw)        <span class="comment">//自定义删除器</span></span><br><span class="line">                  &#123;                     <span class="comment">//（和条款18一样）</span></span><br><span class="line">                      <span class="built_in">makeLogEntry</span>(pw);</span><br><span class="line">                      <span class="keyword">delete</span> pw;</span><br><span class="line">                  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">std::unique_ptr&lt;                        <span class="comment">//删除器类型是</span></span></span><br><span class="line"><span class="function">    Widget, <span class="title">decltype</span><span class="params">(loggingDel)</span>        <span class="comment">//指针类型的一部分</span></span></span><br><span class="line"><span class="function">    &gt; <span class="title">upw</span><span class="params">(<span class="keyword">new</span> Widget, loggingDel)</span></span>;</span><br><span class="line">std::shared_ptr&lt;Widget&gt;                 <span class="comment">//删除器类型不是</span></span><br><span class="line">    <span class="built_in">spw</span>(<span class="keyword">new</span> Widget, loggingDel);        <span class="comment">//指针类型的一部分</span></span><br></pre></td></tr></table></figure>
+<p>考虑有两个<code>std::shared_ptr&lt;Widget&gt;</code>，虽然带有不同的删除器，但他们是同一类型。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> customDeleter1 = [](Widget *pw) &#123; … &#125;;     <span class="comment">//自定义删除器，</span></span><br><span class="line"><span class="keyword">auto</span> customDeleter2 = [](Widget *pw) &#123; … &#125;;     <span class="comment">//每种类型不同</span></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">pw1</span><span class="params">(<span class="keyword">new</span> Widget, customDeleter1)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">pw2</span><span class="params">(<span class="keyword">new</span> Widget, customDeleter2)</span></span>;</span><br><span class="line">std::vector&lt;std::shared_ptr&lt;Widget&gt;&gt; vpw&#123; pw1, pw2 &#125;;</span><br></pre></td></tr></table></figure>
+<p>此外，自定义删除器不会改变<code>std::shared_ptr</code>对象的大小。<code>std::shared_ptr</code>内部包含一个指向资源的原始指针，还包含一个指向<strong>控制块</strong>的指针。一个控制块包含引用计数、弱计数和指向自定义删除器、分配器等的额外功能指针。每个<code>std::shared_ptr</code>管理的对象都有个相应的控制块。</p>
+<p><img src="https://raw.githubusercontent.com/lmqqqqqq/PicGo-Image/main/img/202403210005681.png" alt="image-20240321000449021" style="zoom:50%;" /></p>
+<p>控制块的创建会遵循下面几条规则：</p>
+<ul>
+<li><code>std::make_shared</code>总是创建一个控制块。</li>
+<li>当从独占指针（即<code>std::unique_ptr</code>或者<code>std::auto_ptr</code>）上构造出<code>std::shared_ptr</code>时会创建控制块。</li>
+<li>当从原始指针上构造出<code>std::shared_ptr</code>时会创建控制块。</li>
+</ul>
+<p>关于第3点, 一般不建议从原始指针上构造一个<code>std::shared_ptr</code>，因为指向的对象容易有多个控制块关联，从而对象将会被销毁多次。如以下这个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> pw = <span class="keyword">new</span> Widget;                           <span class="comment">//pw是原始指针</span></span><br><span class="line">…</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw1</span><span class="params">(pw, loggingDel)</span></span>;   <span class="comment">//为*pw创建控制块</span></span><br><span class="line">…</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw2</span><span class="params">(pw, loggingDel)</span></span>;   <span class="comment">//为*pw创建第二个控制块</span></span><br></pre></td></tr></table></figure>
+<p>因此，避免传给<code>std::shared_ptr</code>构造函数原始指针，而是使用<code>std::make_shared</code>。如果使用了自定义删除器导致无法使用<code>std::make_shared</code>，直接传<code>new</code>出来的结果，而不要传指针变量。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw1</span><span class="params">(<span class="keyword">new</span> Widget,    <span class="comment">//直接使用new的结果</span></span></span></span><br><span class="line"><span class="params"><span class="function">                             loggingDel)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw2</span><span class="params">(spw1)</span></span>;         <span class="comment">//spw2使用spw1一样的控制块</span></span><br></pre></td></tr></table></figure>
+<p>一个比较意外的地方是使用<code>this</code>指针作为<code>std::shared_ptr</code>构造函数实参可能创建多个控制块。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::vector&lt;std::shared_ptr&lt;Widget&gt;&gt; processedWidgets;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    …</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">()</span></span>;</span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::process</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    …                                       <span class="comment">//处理Widget</span></span><br><span class="line">    processedWidgets.<span class="built_in">emplace_back</span>(<span class="keyword">this</span>);    <span class="comment">//然后将它加到已处理过的Widget</span></span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>向<code>std::shared_ptr</code>的容器传递一个原始指针（<code>this</code>），根据控制块的创建规则3，<code>std::shared_ptr</code>会为指向的<code>Widget</code>（<code>*this</code>）创建一个控制块。但是成员函数外面早已存在指向那个<code>Widget</code>对象的指针。</p>
+<p><code>std::shared_ptr</code>API有处理这种情况的模板类：<code>std::enable_shared_from_this&lt;T&gt;</code>和成员函数<code>shared_from_this（）</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span>: <span class="keyword">public</span> std::enable_shared_from_this&lt;Widget&gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    …</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">()</span></span>;</span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::process</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//和之前一样，处理Widget</span></span><br><span class="line">    …</span><br><span class="line">    <span class="comment">//把指向当前对象的std::shared_ptr加入processedWidgets</span></span><br><span class="line">    processedWidgets.<span class="built_in">emplace_back</span>(<span class="built_in">shared_from_this</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>std::unique_ptr</code>可以转换为<code>std::shared_ptr</code>，但是<strong>反之不行</strong>。</p>
+<p><code>std::shared_ptr</code>不支持数组的资源管理。到C++20才支持。</p>
+<p><strong>重点</strong></p>
+<ul>
+<li><p><strong>std::shared_ptr</strong> 为有共享所有权的任意资源提供一种自动垃圾回收的便捷方式。</p>
+</li>
+<li><p>与 <strong>std::unique_ptr</strong> 相比, <strong>std::shared_ptr</strong> 对象通常大两倍, 会产生控制块的开销, 需要原子性的引用计数修改操作。</p>
+</li>
+<li><p>默认资源销毁是通过<strong>delete</strong>, 但支持自定义删除器. 删除器的类型对 <strong>std::shared_ptr</strong> 的声明类型没有影响。</p>
+</li>
+<li><p>避免从原始指针变量创建 <strong>std::shared_ptr</strong>。</p>
+</li>
 </ul>
 ]]></content>
       <categories>

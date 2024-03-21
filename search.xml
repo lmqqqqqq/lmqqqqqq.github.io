@@ -744,4 +744,50 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
         <tag>leetcode</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Effective Modern C++ Item 20</title>
+    <url>/2024/03/21/Effective%20Modern%20C++%20Item%2020/</url>
+    <content><![CDATA[<h1 id="Item-20-Use-std-weak-ptr-for-std-shared-ptr-like-pointers-that-can-dangle"><a href="#Item-20-Use-std-weak-ptr-for-std-shared-ptr-like-pointers-that-can-dangle" class="headerlink" title="Item 20: Use std::weak_ptr for std::shared_ptr-like pointers that can dangle"></a><strong>Item 20: Use <code>std::weak_ptr</code> for <code>std::shared_ptr</code>-like pointers that can dangle</strong></h1><p><code>std::weak_ptr</code>不是一个独立的智能指针。它是<code>std::shared_ptr</code>的增强。<code>std::weak_ptr</code>不能解引用，不会影响所指对象的引用计数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> spw =                      <span class="comment">//spw创建之后，指向的Widget的</span></span><br><span class="line">    std::<span class="built_in">make_shared</span>&lt;Widget&gt;(); <span class="comment">//引用计数（ref count，RC）为1。</span></span><br><span class="line">                                <span class="comment">//std::make_shared的信息参见条款21</span></span><br><span class="line">…</span><br><span class="line"><span class="function">std::weak_ptr&lt;Widget&gt; <span class="title">wpw</span><span class="params">(spw)</span></span>; <span class="comment">//wpw指向与spw所指相同的Widget。RC仍为1</span></span><br><span class="line">…</span><br><span class="line">spw = <span class="literal">nullptr</span>;                  <span class="comment">//RC变为0，Widget被销毁。</span></span><br><span class="line">                                <span class="comment">//wpw现在悬空</span></span><br></pre></td></tr></table></figure>
+<p><code>std::weak_ptr</code>通常从<code>std::shared_ptr</code>上创建，并使用<code>expired()</code>检查它是否悬空。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (wpw.<span class="built_in">expired</span>()) …            <span class="comment">//如果wpw没有指向对象…</span></span><br></pre></td></tr></table></figure>
+<p><code>std::weak_ptr</code>如果没有悬空，那我们肯定是想访问它的对象的。考虑到它没有解引用操作，我们可以通过从<code>std::weak_ptr</code>创建<code>std::shared_ptr</code>来实现访问所指对象：</p>
+<ul>
+<li>使用<code>std::weak_ptr::lock</code>，它返回一个<code>std::shared_ptr</code>，如果<code>std::weak_ptr</code>悬空，<code>std::shared_ptr</code>为空。</li>
+<li>以<code>std::weak_ptr</code>为实参构造<code>std::shared_ptr</code>。如果<code>std::weak_ptr</code>悬空，会抛出一个异常。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::shared_ptr&lt;Widget&gt; spw1 = wpw.<span class="built_in">lock</span>();  <span class="comment">//如果wpw过期，spw1就为空</span></span><br><span class="line"></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw3</span><span class="params">(wpw)</span></span>;          <span class="comment">//如果wpw过期，抛出std::bad_weak_ptr异常</span></span><br></pre></td></tr></table></figure>
+<p><strong>std::weak_ptr</strong> 有三种主要用法:</p>
+<ol>
+<li><p><strong>缓存</strong></p>
+<p>我们希望将一些计算结果存储在缓存中, 缓存对象的指针需要知道它是否已经悬空。所以缓存应该使用<code>std::weak_ptr</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;<span class="type">const</span> Widget&gt; <span class="title">fastLoadWidget</span><span class="params">(WidgetID id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> std::unordered_map&lt;WidgetID,</span><br><span class="line">                              std::weak_ptr&lt;<span class="type">const</span> Widget&gt;&gt; cache;</span><br><span class="line">                                        <span class="comment">//译者注：这里std::weak_ptr&lt;const Widget&gt;是高亮</span></span><br><span class="line">    <span class="keyword">auto</span> objPtr = cache[id].<span class="built_in">lock</span>();     <span class="comment">//objPtr是去缓存对象的</span></span><br><span class="line">                                        <span class="comment">//std::shared_ptr（或</span></span><br><span class="line">                                        <span class="comment">//当对象不在缓存中时为null）</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!objPtr) &#123;                      <span class="comment">//如果不在缓存中</span></span><br><span class="line">        objPtr = <span class="built_in">loadWidget</span>(id);        <span class="comment">//加载它</span></span><br><span class="line">        cache[id] = objPtr;             <span class="comment">//缓存它</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> objPtr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>观察者设计模式</strong></p>
+<p>观察者设计模式有<strong>observers</strong>观察的<strong>subjects</strong>。每个<strong>subjects</strong>都持有指向其<strong>observers</strong>的指针。因此如果<strong>subjects</strong>状态发生变化, 它可以向<strong>observers</strong>发送更新。但它必须确保如果<strong>observers</strong>被销毁后不再访问它。<strong>std::weak_ptr</strong> 是此处使用的正确指针类型。</p>
+</li>
+<li><p><strong>循环引用</strong></p>
+<p>有一个用例, <strong>A</strong> 持有 <strong>B</strong> 的一个 <strong>std::shared_ptr</strong>，但 <strong>B</strong> 也想指向回 <strong>A</strong>.，如下图所示:</p>
+<p><img src="https://cntransgroup.github.io/EffectiveModernCppChinese/4.SmartPointers/media/item20_fig2.png" alt="item20_fig2"></p>
+<ul>
+<li>使用原始指针：如果 A 被销毁, B 可能会无意中引用到悬挂指针，不好。</li>
+<li><code>std::shared_ptr</code>：A和B都互相持有对方的<code>std::shared_ptr</code>，导致了循环引用，错误。</li>
+<li><code>std::weak_ptr</code>：尽管A和B互相指向对方，B的指针不会影响A的引用计数，正确。</li>
+</ul>
+</li>
+</ol>
+<p>从效率角度来看，<code>std::weak_ptr</code>与<code>std::shared_ptr</code>基本相同。</p>
+<p><strong>重点</strong></p>
+<ul>
+<li>将 <strong>std::weak_ptr</strong> 替代可能会悬空的 <strong>std::shared_ptr</strong> 。</li>
+<li><strong>std::weak_ptr</strong> 的潜在使用场景包括缓存、观察者列表和打破 <strong>std::shared_ptr</strong> 循环结构。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
 </search>

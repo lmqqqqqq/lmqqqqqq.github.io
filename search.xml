@@ -790,4 +790,52 @@ f_i=max\{f_j\}+1</script><p>其中 fj 为倒数第二个区间，满足 fj 与 f
         <tag>Effective Modern C++</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Effective Modern C++ Item 21</title>
+    <url>/2024/03/23/Effective%20Modern%20C++%20Item%2021/</url>
+    <content><![CDATA[<h1 id="Prefer-std-make-unique-and-std-make-shared-to-direct-use-of-new"><a href="#Prefer-std-make-unique-and-std-make-shared-to-direct-use-of-new" class="headerlink" title="Prefer std::make_unique and std::make_shared to direct use of new"></a><strong>Prefer <code>std::make_unique</code> and <code>std::make_shared</code> to direct use of <code>new</code></strong></h1><p>一般情况下, 更倾向于使用<strong>make</strong>系列函数来创建智能指针，而不是直接使用<strong>new</strong>。</p>
+<p>首先, 它避免了代码重复。使用<code>new</code>的版本重复了类型，但是<code>make</code>函数的版本没有。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">upw1</span><span class="params">(std::make_unique&lt;Widget&gt;())</span></span>;      <span class="comment">//使用make函数</span></span><br><span class="line"><span class="function">std::unique_ptr&lt;Widget&gt; <span class="title">upw2</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>;   <span class="comment">//不使用make函数</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">spw1</span><span class="params">(std::make_shared&lt;Widget&gt;())</span></span>;      <span class="comment">//使用make函数</span></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw2</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>;   <span class="comment">//不使用make函数</span></span><br></pre></td></tr></table></figure>
+<p>其次, <strong>make</strong> 系列函数有助于实现更好的异常安全代码。考虑以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">processWidget</span><span class="params">(std::shared_ptr&lt;Widget&gt; spw, <span class="type">int</span> priority)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">computePriority</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">shared_ptr</span>&lt;Widget&gt;(<span class="keyword">new</span> Widget), <span class="built_in">computePriority</span>()); <span class="comment">//潜在的资源泄漏！   </span></span><br></pre></td></tr></table></figure>
+<p>在运行时，必须执行以下操作，<code>processWidget</code>才开始执行：</p>
+<ul>
+<li>一个<code>Widget</code>对象必须在堆上被创建</li>
+<li><code>std::shared_ptr&lt;Widget&gt;</code>构造函数执行</li>
+<li>运行<code>computePriority（）</code></li>
+</ul>
+<p>以上三个操作可以按任意顺序执行。但如果正好按以顺序执行，<code>computePriority()</code> 抛出异常, 第一步动态分配的<code>Widget</code>就会泄漏。</p>
+<p>使用<code>std::make_shared</code>可以防止这种问题：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">make_shared</span>&lt;Widget&gt;(),  <span class="built_in">computePriority</span>()); <span class="comment">//没有潜在的资源泄漏    </span></span><br></pre></td></tr></table></figure>
+<p>第三，使用<code>std::make_shared</code>能提升效率。</p>
+<p>直接使用<code>new</code>需要为<code>Widget</code>进行两次内存分配，一次为<code>Widget</code>对象，一次为控制块。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>使用<code>std::make_shared</code>只分配一块内存，同时容纳了<code>Widget</code>对象和控制块。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> spw = std::<span class="built_in">make_shared</span>&lt;Widget&gt;();</span><br></pre></td></tr></table></figure>
+<p>但是有些情况下不适用<code>std::make_shared</code>。例如，<code>make</code>函数都不允许指定自定义删除器。如果想为智能指针指定一个自定义删除器, 只能直接使用 <strong>new</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> widgetDeleter = [](Widget* pw) &#123; … &#125;;</span><br><span class="line"><span class="function">std::unique_ptr&lt;Widget, <span class="title">decltype</span><span class="params">(widgetDeleter)</span>&gt; <span class="title">upw</span><span class="params">(<span class="keyword">new</span> Widget, widgetDeleter)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw</span><span class="params">(<span class="keyword">new</span> Widget, widgetDeleter)</span></span>;    </span><br></pre></td></tr></table></figure>
+<p>第二，<code>make</code>函数中，完美转发使用小括号，而不是花括号。如果想用花括号初始化指向的对象，就必须使用<code>new</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// a vector of 10 elements, each equal to 20</span></span><br><span class="line"><span class="keyword">auto</span> spv = std::make_shared&lt;std::vector&lt;<span class="type">int</span>&gt;&gt;(<span class="number">10</span>, <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//折中方案，创建std::initializer_list</span></span><br><span class="line"><span class="keyword">auto</span> initList = &#123; <span class="number">10</span>, <span class="number">20</span> &#125;;</span><br><span class="line"><span class="comment">//使用std::initializer_list为形参的构造函数创建std::vector</span></span><br><span class="line"><span class="keyword">auto</span> spv = std::make_shared&lt;std::vector&lt;<span class="type">int</span>&gt;&gt;(initList);</span><br></pre></td></tr></table></figure>
+<p>对于<code>std::shared_ptr</code>和它的<code>make</code>函数，还有2个问题。</p>
+<p>第一是一些重载了<code>operator new</code>和<code>operator delete</code>的类。他们不太适用于<code>std::shared_ptr</code>对自定义分配和释放的支持。</p>
+<p>第二是分配的对象非常大并且有 <strong>std::weak_ptr</strong> 指向它。通过<code>std::shared_ptr</code>的<code>make</code>函数分配的内存（对象+控制快），直到最后一个<code>std::shared_ptr</code>和最后一个指向它的<code>std::weak_ptr</code>都下降到 <strong>count=0</strong> 时，才会释放控制快，从而释放内存。这不适用于系统内存很吃紧的情况。</p>
+<p>如果处于不合适使用<code>std::make_shared</code>的情况下，最好的方法是确保在直接使用<code>new</code>时，在<strong>一个不做其他事情的语句中</strong>，立即将结果传递到智能指针构造函数。防止在使用<code>new</code>和调用管理<code>new</code>出来对象的智能指针的构造函数之间发生异常。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">shared_ptr</span>&lt;Widget&gt;(<span class="keyword">new</span> Widget, cusDel),  <span class="built_in">computePriority</span>());</span><br><span class="line"></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw</span><span class="params">(<span class="keyword">new</span> Widget, cusDel)</span></span>;</span><br><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">move</span>(spw), <span class="built_in">computePriority</span>());   <span class="comment">//高效且异常安全</span></span><br></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li><p>相比于直接使用<strong>new</strong>, <strong>std::make_unique</strong>和<strong>std::make_shared</strong>可以消除代码重复, 提高异常安全性且生成的代码更小更快。</p>
+</li>
+<li><p>不适合使用<strong>std::make_X</strong>系列函数的情况包括需要指定自定义删除器和希望用花括号初始化。</p>
+</li>
+<li><p>对于 <strong>std::shared_ptr</strong>, 其他不建议使用<strong>make</strong> 系列函数的情况还包括 (1) 具有自定义内存管理的类 (2) 有内存担忧的系统(3) 非常大的对象、(4)比相应的 <strong>std::shared_ptr</strong> 生命周期更长的的 <strong>std::weak_ptr</strong>。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>Effective Modern C++</tag>
+      </tags>
+  </entry>
 </search>

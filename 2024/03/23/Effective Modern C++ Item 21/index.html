@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="STL," />
+  <meta name="keywords" content="Effective Modern C++," />
 
 
 
@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="记录了emplace_back()与push_back()的区别">
+<meta name="description" content="记录了我对Item21 Prefer std::make_unique and std::make_shared to direct use of new的学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="emplace_back Vs push_back">
-<meta property="og:url" content="http://example.com/2023/09/23/emplace-back/index.html">
+<meta property="og:title" content="Effective Modern C++ Item 21">
+<meta property="og:url" content="http://example.com/2024/03/23/Effective%20Modern%20C++%20Item%2021/index.html">
 <meta property="og:site_name" content="Eric Lu">
-<meta property="og:description" content="记录了emplace_back()与push_back()的区别">
+<meta property="og:description" content="记录了我对Item21 Prefer std::make_unique and std::make_shared to direct use of new的学习笔记">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-23T14:30:57.000Z">
-<meta property="article:modified_time" content="2023-09-23T16:38:25.814Z">
+<meta property="article:published_time" content="2024-03-23T14:51:40.000Z">
+<meta property="article:modified_time" content="2024-03-23T16:55:55.445Z">
 <meta property="article:author" content="Eric Lu">
-<meta property="article:tag" content="STL">
+<meta property="article:tag" content="Effective Modern C++">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2023/09/23/emplace-back/"/>
+  <link rel="canonical" href="http://example.com/2024/03/23/Effective Modern C++ Item 21/"/>
 
 
 
 
 
-  <title>emplace_back Vs push_back | Eric Lu</title>
+  <title>Effective Modern C++ Item 21 | Eric Lu</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/23/emplace-back/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/23/Effective%20Modern%20C++%20Item%2021/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">emplace_back Vs push_back</h1>
+          <h1 class="post-title" itemprop="name headline">Effective Modern C++ Item 21</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2023-09-23T22:30:57+08:00">
-                2023-09-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-23T22:51:40+08:00">
+                2024-03-23
               </time>
             
 
@@ -373,7 +373,7 @@
 
           
               <div class="post-description">
-                  记录了emplace_back()与push_back()的区别
+                  记录了我对Item21 Prefer std::make_unique and std::make_shared to direct use of new的学习笔记
               </div>
           
 
@@ -390,31 +390,43 @@
       
 
       
-        <p><code>emplace_back()</code>是C++11的新特性</p>
-<h2 id="emplace-back-和push-back-的区别"><a href="#emplace-back-和push-back-的区别" class="headerlink" title="emplace_back()和push_back()的区别"></a>emplace_back()和push_back()的区别</h2><ol>
-<li><code>push_back()</code> 在vector尾部添加一个元素时，首先会创建一个临时对象，然后再将这个临时对象移动或拷贝到 vector 中<ul>
-<li>如果是拷贝的话，事后会自动销毁先前创建的这个临时元素</li>
+        <h1 id="Prefer-std-make-unique-and-std-make-shared-to-direct-use-of-new"><a href="#Prefer-std-make-unique-and-std-make-shared-to-direct-use-of-new" class="headerlink" title="Prefer std::make_unique and std::make_shared to direct use of new"></a><strong>Prefer <code>std::make_unique</code> and <code>std::make_shared</code> to direct use of <code>new</code></strong></h1><p>一般情况下, 更倾向于使用<strong>make</strong>系列函数来创建智能指针，而不是直接使用<strong>new</strong>。</p>
+<p>首先, 它避免了代码重复。使用<code>new</code>的版本重复了类型，但是<code>make</code>函数的版本没有。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">upw1</span><span class="params">(std::make_unique&lt;Widget&gt;())</span></span>;      <span class="comment">//使用make函数</span></span><br><span class="line"><span class="function">std::unique_ptr&lt;Widget&gt; <span class="title">upw2</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>;   <span class="comment">//不使用make函数</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">spw1</span><span class="params">(std::make_shared&lt;Widget&gt;())</span></span>;      <span class="comment">//使用make函数</span></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw2</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>;   <span class="comment">//不使用make函数</span></span><br></pre></td></tr></table></figure>
+<p>其次, <strong>make</strong> 系列函数有助于实现更好的异常安全代码。考虑以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">processWidget</span><span class="params">(std::shared_ptr&lt;Widget&gt; spw, <span class="type">int</span> priority)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">computePriority</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">shared_ptr</span>&lt;Widget&gt;(<span class="keyword">new</span> Widget), <span class="built_in">computePriority</span>()); <span class="comment">//潜在的资源泄漏！   </span></span><br></pre></td></tr></table></figure>
+<p>在运行时，必须执行以下操作，<code>processWidget</code>才开始执行：</p>
+<ul>
+<li>一个<code>Widget</code>对象必须在堆上被创建</li>
+<li><code>std::shared_ptr&lt;Widget&gt;</code>构造函数执行</li>
+<li>运行<code>computePriority（）</code></li>
 </ul>
+<p>以上三个操作可以按任意顺序执行。但如果正好按以顺序执行，<code>computePriority()</code> 抛出异常, 第一步动态分配的<code>Widget</code>就会泄漏。</p>
+<p>使用<code>std::make_shared</code>可以防止这种问题：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">make_shared</span>&lt;Widget&gt;(),  <span class="built_in">computePriority</span>()); <span class="comment">//没有潜在的资源泄漏    </span></span><br></pre></td></tr></table></figure>
+<p>第三，使用<code>std::make_shared</code>能提升效率。</p>
+<p>直接使用<code>new</code>需要为<code>Widget</code>进行两次内存分配，一次为<code>Widget</code>对象，一次为控制块。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>使用<code>std::make_shared</code>只分配一块内存，同时容纳了<code>Widget</code>对象和控制块。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> spw = std::<span class="built_in">make_shared</span>&lt;Widget&gt;();</span><br></pre></td></tr></table></figure>
+<p>但是有些情况下不适用<code>std::make_shared</code>。例如，<code>make</code>函数都不允许指定自定义删除器。如果想为智能指针指定一个自定义删除器, 只能直接使用 <strong>new</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> widgetDeleter = [](Widget* pw) &#123; … &#125;;</span><br><span class="line"><span class="function">std::unique_ptr&lt;Widget, <span class="title">decltype</span><span class="params">(widgetDeleter)</span>&gt; <span class="title">upw</span><span class="params">(<span class="keyword">new</span> Widget, widgetDeleter)</span></span>;</span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw</span><span class="params">(<span class="keyword">new</span> Widget, widgetDeleter)</span></span>;    </span><br></pre></td></tr></table></figure>
+<p>第二，<code>make</code>函数中，完美转发使用小括号，而不是花括号。如果想用花括号初始化指向的对象，就必须使用<code>new</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a vector of 10 elements, each equal to 20</span></span><br><span class="line"><span class="keyword">auto</span> spv = std::make_shared&lt;std::vector&lt;<span class="type">int</span>&gt;&gt;(<span class="number">10</span>, <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//折中方案，创建std::initializer_list</span></span><br><span class="line"><span class="keyword">auto</span> initList = &#123; <span class="number">10</span>, <span class="number">20</span> &#125;;</span><br><span class="line"><span class="comment">//使用std::initializer_list为形参的构造函数创建std::vector</span></span><br><span class="line"><span class="keyword">auto</span> spv = std::make_shared&lt;std::vector&lt;<span class="type">int</span>&gt;&gt;(initList);</span><br></pre></td></tr></table></figure>
+<p>对于<code>std::shared_ptr</code>和它的<code>make</code>函数，还有2个问题。</p>
+<p>第一是一些重载了<code>operator new</code>和<code>operator delete</code>的类。他们不太适用于<code>std::shared_ptr</code>对自定义分配和释放的支持。</p>
+<p>第二是分配的对象非常大并且有 <strong>std::weak_ptr</strong> 指向它。通过<code>std::shared_ptr</code>的<code>make</code>函数分配的内存（对象+控制快），直到最后一个<code>std::shared_ptr</code>和最后一个指向它的<code>std::weak_ptr</code>都下降到 <strong>count=0</strong> 时，才会释放控制快，从而释放内存。这不适用于系统内存很吃紧的情况。</p>
+<p>如果处于不合适使用<code>std::make_shared</code>的情况下，最好的方法是确保在直接使用<code>new</code>时，在<strong>一个不做其他事情的语句中</strong>，立即将结果传递到智能指针构造函数。防止在使用<code>new</code>和调用管理<code>new</code>出来对象的智能指针的构造函数之间发生异常。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">shared_ptr</span>&lt;Widget&gt;(<span class="keyword">new</span> Widget, cusDel),  <span class="built_in">computePriority</span>());</span><br><span class="line"></span><br><span class="line"><span class="function">std::shared_ptr&lt;Widget&gt; <span class="title">spw</span><span class="params">(<span class="keyword">new</span> Widget, cusDel)</span></span>;</span><br><span class="line"><span class="built_in">processWidget</span>(std::<span class="built_in">move</span>(spw), <span class="built_in">computePriority</span>());   <span class="comment">//高效且异常安全</span></span><br></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li><p>相比于直接使用<strong>new</strong>, <strong>std::make_unique</strong>和<strong>std::make_shared</strong>可以消除代码重复, 提高异常安全性且生成的代码更小更快。</p>
 </li>
-<li><code>emplace_back()</code> 是直接在 vector 尾部创建这个元素，省去了移动或者拷贝元素的过程</li>
-<li>但 <code>emplace_back()</code>并不是任何场景效率都比 <code>push_back()</code>高</li>
-</ol>
-<h2 id="emplace-back-效率更高的应用场景"><a href="#emplace-back-效率更高的应用场景" class="headerlink" title="emplace_back()效率更高的应用场景"></a>emplace_back()效率更高的应用场景</h2><p>在向 vector 中添加元素时（假设元素类型是一个类类型）</p>
-<ol>
-<li>如果添加的是类类型的有参构造函数的参数类型对应的变量：<ul>
-<li>如果通过 <code>push_back()</code> 方式添加，则会调用<strong>一次有参构造 + 一次移动构造</strong> ，如果移动构造不可用则为拷贝构造</li>
-<li>如果通过 <code>emplace_back()</code> 方式添加，则只会调用<strong>一次有参构造</strong></li>
+<li><p>不适合使用<strong>std::make_X</strong>系列函数的情况包括需要指定自定义删除器和希望用花括号初始化。</p>
+</li>
+<li><p>对于 <strong>std::shared_ptr</strong>, 其他不建议使用<strong>make</strong> 系列函数的情况还包括 (1) 具有自定义内存管理的类 (2) 有内存担忧的系统(3) 非常大的对象、(4)比相应的 <strong>std::shared_ptr</strong> 生命周期更长的的 <strong>std::weak_ptr</strong>。</p>
+</li>
 </ul>
-</li>
-<li>如果添加的是类类型的变量：<ul>
-<li>不论是通过 <code>push_back()</code> 方式还是 <code>emplace_back()</code> 方式，都只会调用<strong>一次拷贝构造</strong></li>
-</ul>
-</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span> (<span class="type">int</span> num) &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">this</span>-&gt;num = num;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Person</span> (<span class="type">const</span> Person &amp; p) &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">this</span>-&gt;num = p.num;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;num=&quot;</span> &lt;&lt; <span class="keyword">this</span>-&gt;num &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Person</span> (Person &amp;&amp; p) <span class="keyword">noexcept</span> &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">this</span>-&gt;num = p.num;</span><br><span class="line">        p.num = <span class="number">0</span>;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;num=&quot;</span> &lt;&lt; <span class="keyword">this</span>-&gt;num &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ~<span class="built_in">Person</span> () &#123;</span><br><span class="line">        cout &lt;&lt; __PRETTY_FUNCTION__ &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test01</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Person <span class="title">p1</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    vector&lt;Person&gt; v;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">push_back</span>(<span class="number">10</span>);  <span class="comment">// 会调用一次有参构造+一次移动构造</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">emplace_back</span>(<span class="number">20</span>);  <span class="comment">// 会调用一次有参构造</span></span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">push_back</span>(p1);  <span class="comment">// 会调用一次拷贝构造</span></span><br><span class="line">    </span><br><span class="line">    cout &lt;&lt; __LINE__ &lt;&lt; endl;</span><br><span class="line">    v.<span class="built_in">emplace_back</span>(p1);  <span class="comment">// 会调用一次拷贝构造</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">test01</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>以有参构造中的参数类型的变量作为实参来使用 <code>push_back()</code>和<code>emplace_back()</code> ，可以提升效率，但我认为这种实参形式不易于理解</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="http://c.biancheng.net/view/6826.html">http://c.biancheng.net/view/6826.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/unonoi/article/details/114680819?spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;utm_relevant_index=9">https://blog.csdn.net/unonoi/article/details/114680819?spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-114680819-blog-119282296.235%5Ev38%5Epc_relevant_anti_t3_base&amp;utm_relevant_index=9</a></p>
 
       
     </div>
@@ -432,7 +444,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/STL/" rel="tag"># STL</a>
+            <a href="/tags/Effective-Modern-C/" rel="tag"># Effective Modern C++</a>
           
         </div>
       
@@ -445,8 +457,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2023/09/15/std-move/" rel="next" title="std::move">
-                <i class="fa fa-chevron-left"></i> std::move
+              <a href="/2024/03/21/Effective%20Modern%20C++%20Item%2020/" rel="next" title="Effective Modern C++ Item 20">
+                <i class="fa fa-chevron-left"></i> Effective Modern C++ Item 20
               </a>
             
           </div>
@@ -454,10 +466,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2024/02/08/605%E7%A7%8D%E8%8A%B1%E9%97%AE%E9%A2%98/" rel="prev" title="605种花问题">
-                605种花问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -589,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#emplace-back-%E5%92%8Cpush-back-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">emplace_back()和push_back()的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#emplace-back-%E6%95%88%E7%8E%87%E6%9B%B4%E9%AB%98%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">emplace_back()效率更高的应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Prefer-std-make-unique-and-std-make-shared-to-direct-use-of-new"><span class="nav-number">1.</span> <span class="nav-text">Prefer std::make_unique and std::make_shared to direct use of new</span></a></li></ol></div>
             
 
           </div>
